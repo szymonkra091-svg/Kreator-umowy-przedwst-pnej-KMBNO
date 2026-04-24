@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Kreator Umowy Przedwstępnej — KMBNO</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f0;--sur:#fff;--sur2:#f1efe8;
+  --bd:rgba(0,0,0,0.12);--bd2:rgba(0,0,0,0.22);
+  --tx:#1a1a18;--tx2:#5f5e5a;--tx3:#9a9893;
+  --bl:#185FA5;--blbg:#E6F1FB;--bld:#0C447C;
+  --gn:#1D9E75;--gnbg:#E1F5EE;--gnd:#0F6E56;
+  --am:#BA7517;--ambg:#FAEEDA;
+  --r:8px;--rl:12px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:14px;line-height:1.6}
+.app{max-width:760px;margin:0 auto;padding:1.5rem 1rem 4rem}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;padding-bottom:1rem;border-bottom:0.5px solid var(--bd)}
+.logo{font-size:15px;font-weight:600;color:var(--tx)}.logo span{color:var(--bl)}
+.steps{display:flex;align-items:center;gap:6px}
+.sdot{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--tx3);transition:all .2s}
+.sdot.done{background:var(--gn);border-color:var(--gn);color:#fff}
+.sdot.active{background:var(--bl);border-color:var(--bl);color:#fff}
+.sline{width:20px;height:1.5px;background:var(--bd)}
+.card{background:var(--sur);border:0.5px solid var(--bd);border-radius:var(--rl);padding:1.25rem;margin-bottom:1rem}
+.ctit{font-size:10px;font-weight:600;color:var(--tx3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem}
+.pbadge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;color:var(--bl);background:var(--blbg);border-radius:4px;padding:2px 8px;margin-bottom:10px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+.tab{padding:5px 13px;font-size:12px;font-weight:500;border:0.5px solid var(--bd2);border-radius:20px;background:transparent;color:var(--tx2);cursor:pointer;font-family:inherit;transition:all .15s}
+.tab:hover{border-color:var(--bl);color:var(--bl)}
+.tab.on{background:var(--bl);border-color:var(--bl);color:#fff}
+.tab.am{border-color:var(--am);color:var(--am)}
+.tab.am.on{background:var(--am);border-color:var(--am);color:#fff}
+.row{display:grid;gap:10px;margin-bottom:10px}
+.r1{grid-template-columns:1fr}
+.r2{grid-template-columns:1fr 1fr}
+.r3{grid-template-columns:1fr 1fr 1fr}
+.fg label{display:block;font-size:11px;color:var(--tx2);margin-bottom:3px}
+.fg input,.fg select,.fg textarea{width:100%;padding:8px 10px;border:0.5px solid var(--bd2);border-radius:var(--r);background:var(--sur);color:var(--tx);font-size:13px;font-family:inherit}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--bl);box-shadow:0 0 0 2px rgba(24,95,165,.15)}
+.fg .hint{font-size:10px;color:var(--tx3);margin-top:3px}
+.comp{font-size:12px;font-weight:500;color:var(--bl);background:var(--blbg);border-radius:var(--r);padding:8px 10px;min-height:34px}
+.chk{display:flex;align-items:flex-start;gap:9px;margin-bottom:9px}
+.chk label{font-size:13px;color:var(--tx2);cursor:pointer;line-height:1.4}
+input[type=checkbox]{width:15px;height:15px;flex-shrink:0;margin-top:1px;accent-color:var(--bl);cursor:pointer}
+.sblock{border:0.5px solid var(--bd);border-radius:var(--r);padding:1rem;margin-bottom:10px}
+.shead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.snr{font-size:11px;font-weight:600;color:var(--bl);background:var(--blbg);padding:2px 10px;border-radius:20px}
+.brm{padding:3px 10px;border:0.5px solid var(--bd2);border-radius:var(--r);background:transparent;color:var(--tx3);cursor:pointer;font-size:11px;font-family:inherit}
+.brm:hover{background:var(--sur2);color:var(--tx)}
+.badd{display:flex;align-items:center;gap:6px;padding:8px 14px;border:0.5px solid var(--bl);border-radius:var(--r);background:transparent;color:var(--bl);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px}
+.badd:hover{background:var(--blbg)}
+.badd:disabled{opacity:.4;cursor:default}
+.kmrow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.kmrow input{flex:1;padding:7px 10px;border:0.5px solid var(--bd2);border-radius:var(--r);font-size:13px;font-family:inherit;background:var(--sur);color:var(--tx)}
+.kmrow input:focus{outline:none;border-color:var(--bl)}
+.brmk{width:28px;height:28px;border:0.5px solid var(--bd2);border-radius:var(--r);background:transparent;color:var(--tx3);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brmk:hover{background:var(--sur2)}
+.baddkm{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border:0.5px solid var(--bl);border-radius:var(--r);background:transparent;color:var(--bl);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:2px}
+.baddkm:hover{background:var(--blbg)}
+.bsol{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--gnd);background:var(--gnbg);border-radius:var(--r);padding:5px 10px;margin-top:8px}
+.bwarn{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--am);background:var(--ambg);border-radius:4px;padding:3px 8px;margin-top:5px}
+.spar{background:var(--sur2);border-left:2px solid var(--bd2);border-radius:0 var(--r) var(--r) 0;padding:10px 14px;font-size:12px;color:var(--tx2);line-height:1.8;margin-bottom:5px}
+.snote{font-size:10px;color:var(--tx3);font-style:italic}
+.pcard{background:var(--sur2);border:0.5px solid var(--bd);border-radius:var(--r);padding:.75rem 1rem;margin-top:10px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pf span{font-size:10px;color:var(--tx3);display:block;margin-bottom:2px}
+.pf strong{font-size:12px;font-weight:500;color:var(--tx)}
+.prev{background:var(--sur2);border:0.5px solid var(--bd);border-radius:var(--r);padding:1rem;font-size:12px;line-height:1.45;color:var(--tx);text-align:justify}
+.prevf{background:var(--sur2);border:0.5px solid var(--bd);border-radius:var(--r);padding:1.5rem;font-size:12px;line-height:2;max-height:560px;overflow-y:auto;white-space:pre-wrap;color:var(--tx)}
+.brow{display:flex;gap:10px;margin-top:1.25rem;align-items:center;flex-wrap:wrap}
+.bp{padding:9px 22px;background:var(--bl);color:var(--blbg);border:none;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.bp:hover{background:var(--bld)}
+.bs{padding:9px 16px;background:transparent;color:var(--tx2);border:0.5px solid var(--bd2);border-radius:var(--r);font-size:13px;cursor:pointer;font-family:inherit}
+.bs:hover{background:var(--sur2)}
+.bpr{padding:9px 22px;background:var(--gn);color:var(--gnbg);border:none;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.bpr:hover{background:var(--gnd)}
+.br{padding:9px 16px;background:transparent;color:var(--tx3);border:0.5px solid var(--bd);border-radius:var(--r);font-size:12px;cursor:pointer;font-family:inherit}
+.stit{font-size:20px;font-weight:600;color:var(--tx);margin-bottom:.2rem}
+.ssub{font-size:12px;color:var(--tx2);margin-bottom:1.5rem}
+.sec{display:none}.sec.on{display:block}
+.div{border:none;border-top:0.5px solid var(--bd);margin:1rem 0}
+.ibox{background:var(--sur2);border-radius:var(--r);padding:8px 10px;font-size:11px;color:var(--tx2);line-height:1.6;margin-top:6px}
+@media print{
+  body{background:#fff}
+  .hdr,.steps,.brow,.ctit,.pbadge,.tabs,.snote,.bsol,.bwarn,.ibox{display:none!important}
+  .card{border:none;padding:.5rem 0;margin:0}
+  .prevf{max-height:none;overflow:visible;border:none;background:#fff;padding:0;font-size:11pt;font-family:'Times New Roman',serif;line-height:1.9}
+  .sec{display:block!important}
+  #s1,#s2,#s3,#s4{display:none!important}
+  #s5{display:block!important}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="hdr">
+  <div class="logo">KMBNO <span>Kreator Umowy</span></div>
+  <div class="steps">
+    <div class="sdot active" id="si1">1</div><div class="sline"></div>
+    <div class="sdot" id="si2">2</div><div class="sline"></div>
+    <div class="sdot" id="si3">3</div><div class="sline"></div>
+    <div class="sdot" id="si4">4</div><div class="sline"></div>
+    <div class="sdot" id="si5">5</div>
+  </div>
+</div>
+
+<!-- KROK 1 -->
+<div class="sec on" id="s1">
+  <div class="stit">Strony umowy</div>
+  <div class="ssub">Krok 1 z 5 — typ nieruchomości, miejsce, sprzedający, pełnomocnik</div>
+  <div class="card">
+    <div class="ctit">Rodzaj nieruchomości</div>
+    <div class="tabs">
+      <button class="tab on" id="t-o" onclick="setT('o')">Lokal — odrębna własność</button>
+      <button class="tab" id="t-s" onclick="setT('s')">Spółdzielcze własnościowe</button>
+      <button class="tab" id="t-g" onclick="setT('g')">Nieruchomość gruntowa</button>
+    </div>
+    <div id="kwtog" style="display:none" class="chk">
+      <input type="checkbox" id="hkw" checked onchange="up1()"/>
+      <label for="hkw">Nieruchomość posiada księgę wieczystą (KW)</label>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctit">Miejsce i data zawarcia</div>
+    <div class="row r2">
+      <div class="fg"><label>Miasto zawarcia</label><input type="text" id="mz" placeholder="np. Warszawa" oninput="up1()"/></div>
+      <div class="fg"><label>Data zawarcia</label><input type="date" id="dz" oninput="up1()"/></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctit">Sprzedający</div>
+    <div id="sl"></div>
+    <div id="bsol" style="display:none" class="bsol">Więcej niż 1 sprzedający — §5 zmieni się automatycznie na zapis solidarny</div>
+    <button class="badd" id="badd" onclick="addS()">+ dodaj sprzedającego</button>
+  </div>
+  <div class="card">
+    <div class="ctit">Pełnomocnik kupującego (KMBNO Sp. z o.o.)</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button class="tab on" id="ptl" onclick="setPM('lista')">Wybierz z listy</button>
+      <button class="tab" id="ptr" onclick="setPM('reczny')">Wpisz ręcznie</button>
+    </div>
+    <div id="pml">
+      <div class="fg">
+        <label>Wybierz pełnomocnika</label>
+        <select id="psel" onchange="onPick()">
+          <option value="">— wybierz pełnomocnika —</option>
+        </select>
+      </div>
+      <div id="pcard" style="display:none" class="pcard">
+        <div class="pgrid">
+          <div class="pf"><span>Imię i nazwisko</span><strong id="pcn"></strong></div>
+          <div class="pf"><span>PESEL</span><strong id="pcp"></strong></div>
+          <div class="pf" style="grid-column:1/-1"><span>Adres zamieszkania</span><strong id="pca"></strong></div>
+          <div class="pf"><span>Dowód osobisty</span><strong id="pcd"></strong></div>
+        </div>
+        <div style="margin-top:10px">
+          <div class="fg"><label>Płeć pełnomocnika</label><select id="pplec" onchange="up1()"><option value="m">Mężczyzna — działającego</option><option value="k">Kobieta — działająca</option></select></div>
+        </div>
+        <div id="pcw" style="display:none" class="bwarn">Adres może wymagać ręcznej weryfikacji</div>
+      </div>
+    </div>
+    <div id="pmr" style="display:none">
+      <div class="row r2">
+        <div class="fg"><label>Imię i nazwisko</label><input type="text" id="rn" placeholder="np. Jan Kowalski" oninput="up1()"/></div>
+        <div class="fg"><label>PESEL</label><input type="text" id="rp" placeholder="np. 80010112345" maxlength="11" oninput="up1()"/></div>
+      </div>
+      <div class="row r1"><div class="fg"><label>Adres zamieszkania</label><input type="text" id="ra" placeholder="np. ul. Ściegiennego 12/3, 25-033 Kielce" oninput="up1()"/></div></div>
+      <div class="row r2">
+        <div class="fg"><label>Seria i numer dowodu</label><input type="text" id="rd" placeholder="np. ABC 123456" oninput="up1()"/></div>
+        <div class="fg"><label>Płeć pełnomocnika</label><select id="rplec" onchange="up1()"><option value="m">Mężczyzna</option><option value="k">Kobieta</option></select></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctit">Podgląd nagłówka</div>
+    <div class="prev" id="pv1" style="color:var(--tx3);font-style:italic">Wypełnij dane powyżej…</div>
+  </div>
+  <div class="brow">
+    <button class="bs" disabled>← Wstecz</button>
+    <button class="bp" onclick="go(2)">Dalej: Opis nieruchomości →</button>
+  </div>
+</div>
+
+<!-- KROK 2 -->
+<div class="sec" id="s2">
+  <div class="stit">Opis nieruchomości</div>
+  <div class="ssub">Krok 2 z 5 — §1</div>
+  <div class="card">
+    <div class="ctit">Typ nieruchomości</div>
+    <div class="tabs">
+      <button class="tab on" id="t2o" onclick="setT2('o')">Lokal — odrębna własność</button>
+      <button class="tab" id="t2s" onclick="setT2('s')">Spółdzielcze własnościowe</button>
+      <button class="tab" id="t2g" onclick="setT2('g')">Nieruchomość gruntowa</button>
+      <button class="tab am" id="t2r" onclick="setT2('r')">Zapis ręczny</button>
+    </div>
+    <div id="f2r" style="display:none">
+      <div style="font-size:12px;color:var(--am);background:var(--ambg);border-radius:var(--r);padding:8px 10px;margin-bottom:12px;line-height:1.5">Wpisz treść §1 ręcznie — np. miejsce parkingowe, komórka lokatorska lub inny niestandardowy opis.</div>
+      <div class="row r1"><div class="fg"><label>Treść §1 (po słowach „Sprzedający oświadcza, że:")</label>
+        <textarea id="rpar" rows="7" placeholder="np. • Przysługuje mu prawo do wyłącznego korzystania z miejsca parkingowego nr 12..." oninput="up2()" style="resize:vertical;line-height:1.7"></textarea>
+      </div></div>
+      <hr class="div"/>
+    </div>
+    <div id="f2o">
+      <div class="row r2">
+        <div class="fg"><label>Numer lokalu</label><input type="text" id="onr" placeholder="np. 6" oninput="up2()"/></div>
+        <div class="fg"><label>Miejscowość</label><input type="text" id="oms" placeholder="np. Gdańsk" oninput="up2()"/></div>
+      </div>
+      <div class="row r1"><div class="fg"><label>Ulica i numer budynku</label><input type="text" id="oul" placeholder="np. Ściegiennego 21" oninput="up2()"/></div></div>
+      <div class="row r2">
+        <div class="fg"><label>Powierzchnia użytkowa (m²)</label><input type="text" id="opw" placeholder="np. 32,40" oninput="up2()"/></div>
+        <div class="fg"><label>Numer KW <span style="font-weight:400;color:var(--tx3)">(puste = brak)</span></label><input type="text" id="okw" placeholder="np. GD1G/00088329/5" oninput="up2()"/></div>
+      </div>
+    </div>
+    <div id="f2s" style="display:none">
+      <div class="row r2">
+        <div class="fg"><label>Numer lokalu</label><input type="text" id="snr" placeholder="np. 14" oninput="up2()"/></div>
+        <div class="fg"><label>Miejscowość</label><input type="text" id="sms" placeholder="np. Kraków" oninput="up2()"/></div>
+      </div>
+      <div class="row r1"><div class="fg"><label>Ulica i numer budynku</label><input type="text" id="sul" placeholder="np. Wrocławska 12" oninput="up2()"/></div></div>
+      <div class="row r2">
+        <div class="fg"><label>Powierzchnia użytkowa (m²)</label><input type="text" id="spw" placeholder="np. 48,50" oninput="up2()"/></div>
+        <div class="fg" id="skwg"><label>Numer KW <span style="font-weight:400;color:var(--tx3)">(puste = brak)</span></label><input type="text" id="skw" placeholder="np. KR1C/00012345/6" oninput="up2()"/></div>
+      </div>
+      <div class="chk"><input type="checkbox" id="shkw" checked onchange="togSKW()"/><label for="shkw">Posiada księgę wieczystą</label></div>
+    </div>
+    <div id="f2g" style="display:none">
+      <div class="row r2">
+        <div class="fg"><label>Numer działki ewidencyjnej</label><input type="text" id="gdz" placeholder="np. 1505/99" oninput="up2()"/></div>
+        <div class="fg"><label>Miejscowość</label><input type="text" id="gms" placeholder="np. Libiąż" oninput="up2()"/></div>
+      </div>
+      <div class="row r1"><div class="fg"><label>Ulica i numer budynku</label><input type="text" id="gul" placeholder="np. Cegielniana 53A" oninput="up2()"/></div></div>
+      <div class="row r2">
+        <div class="fg"><label>Powierzchnia (HA)</label><input type="text" id="gpw" placeholder="np. 0,0588" oninput="up2()"/></div>
+        <div class="fg"><label>Numer KW</label><input type="text" id="gkw" placeholder="np. KR1C/00037975/5" oninput="up2()"/></div>
+      </div>
+      <div class="chk"><input type="checkbox" id="gzab" checked onchange="up2()"/><label for="gzab">Działka zabudowana (oddanym do użytkowania budynkiem)</label></div>
+    </div>
+    <hr class="div"/>
+    <div class="ctit" style="margin-bottom:8px">Obciążenia (opcjonalnie)</div>
+    <div class="chk"><input type="checkbox" id="chip" onchange="togHip()"/><label for="chip">Dział IV KW — hipoteka umowna</label></div>
+    <div id="bhip" style="display:none;margin-bottom:12px">
+      <div class="fg"><label>Pełna nazwa wierzyciela hipotecznego</label>
+        <input type="text" id="hipw" placeholder="np. POWSZECHNA KASA OSZCZĘDNOŚCI BANK POLSKI SPÓŁKA AKCYJNA, WARSZAWA ODDZIAŁ W MOGILNIE, 01629826300000" oninput="up2()"/>
+      </div>
+    </div>
+    <div class="chk"><input type="checkbox" id="cegz" onchange="togEgz()"/><label for="cegz">Dział III KW — wpis wszczęcia egzekucji</label></div>
+    <div id="begz" style="display:none">
+      <div style="font-size:11px;color:var(--tx2);margin-bottom:8px">Numery spraw KM</div>
+      <div id="kml"></div>
+      <button class="baddkm" onclick="addKM()">+ dodaj sprawę KM</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctit">Podgląd §1</div>
+    <div class="prev" id="pv2" style="color:var(--tx3);font-style:italic">Wypełnij dane…</div>
+  </div>
+  <div class="brow">
+    <button class="bs" onclick="go(1)">← Wstecz</button>
+    <button class="bp" onclick="go(3)">Dalej: Cena i zadatek →</button>
+  </div>
+</div>
+
+<!-- KROK 3 -->
+<div class="sec" id="s3">
+  <div class="stit">Cena, termin i zadatek</div>
+  <div class="ssub">Krok 3 z 5 — §3, §4, §5, §6</div>
+  <div class="card">
+    <div class="pbadge">§3 — Cena sprzedaży</div>
+    <div class="row r2">
+      <div class="fg"><label>Cena sprzedaży (PLN)</label><input type="number" id="cena" placeholder="np. 350000" min="0" oninput="up3()"/></div>
+      <div class="fg"><label>Słownie</label><div class="comp" id="csl">—</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="pbadge">§4 — Termin umowy przyrzeczonej</div>
+    <div class="row r2">
+      <div class="fg"><label>Termin zawarcia aktu notarialnego</label><input type="date" id="takt" oninput="up3()"/></div>
+      <div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="pbadge">§5 — Zadatek</div>
+    <div class="row r2">
+      <div class="fg"><label>Kwota zadatku (PLN)</label><input type="number" id="zad" placeholder="np. 10000" min="0" oninput="up3()"/></div>
+      <div class="fg"><label>Słownie</label><div class="comp" id="zsl">—</div></div>
+    </div>
+    <div class="row r1" id="kontorow"><div class="fg"><label>Numer rachunku bankowego <span style="font-weight:400;color:var(--tx3)">(puste = wypełnisz ręcznie)</span></label><input type="text" id="konto" placeholder="np. 12 1234 5678 9012 3456 7890 1234" maxlength="32" oninput="fmtK(this);up3()"/></div></div>
+    <div class="row r2" id="tzadrow">
+      <div class="fg"><label>Termin płatności zadatku</label>
+        <select id="tzad" onchange="up3()">
+          <option value="2">2 dni robocze</option>
+          <option value="3" selected>3 dni robocze</option>
+          <option value="5">5 dni roboczych</option>
+          <option value="7">7 dni roboczych</option>
+          <option value="14">14 dni roboczych</option>
+        </select>
+      </div><div></div>
+    </div>
+    <div class="chk" style="margin-top:4px;padding-top:12px;border-top:0.5px solid var(--bd)">
+      <input type="checkbox" id="gotow" onchange="togG()"/>
+      <label for="gotow" style="font-size:13px;font-weight:500;color:var(--tx)">Zadatek zapłacony gotówką</label>
+    </div>
+    <div id="ginfo" style="display:none;font-size:12px;color:var(--gnd);background:var(--gnbg);border-radius:var(--r);padding:8px 10px;margin-top:4px;line-height:1.6">
+      Zapis zmieniony na: <em>„Wskazaną kwotę Kupujący zapłacił gotówką, co Sprzedający niniejszym potwierdza."</em>
+    </div>
+    <div class="ibox" id="solinfo" style="display:none;color:var(--gnd);background:var(--gnbg)">Więcej niż 1 sprzedający — §5 zawiera zapis solidarny: <em>„zwrócą Oni solidarnie Kupującemu"</em></div>
+  </div>
+  <div class="card">
+    <div class="ctit">Podgląd §3–§6</div>
+    <div class="prev" id="pv3" style="color:var(--tx3);font-style:italic">Wypełnij dane…</div>
+  </div>
+  <div class="brow">
+    <button class="bs" onclick="go(2)">← Wstecz</button>
+    <button class="bp" onclick="go(4)">Dalej: Postanowienia końcowe →</button>
+  </div>
+</div>
+
+<!-- KROK 4 -->
+<div class="sec" id="s4">
+  <div class="stit">Postanowienia końcowe</div>
+  <div class="ssub">Krok 4 z 5 — §7, §8, §9, §10 — zapisy stałe</div>
+  <div class="card">
+    <div class="pbadge">§7 — Zakaz sprzedaży osobom trzecim</div>
+    <div class="spar">Sprzedający, od dnia zawarcia niniejszej umowy do dnia zawarcia umowy przyrzeczonej, zobowiązuje się powstrzymać od wszelkich czynności mających na celu sprzedaż Nieruchomości osobom trzecim, w szczególności od zamieszczania ofert jej sprzedaży za pośrednictwem sieci Internet lub kontaktu z podmiotami z zakresu obrotu nieruchomościami. W przypadku, gdyby Sprzedający naruszył opisane zobowiązanie, Kupujący jest uprawniony do dochodzenia odszkodowania na zasadach ogólnych.</div>
+    <div class="snote">Zapis stały — bez edycji</div>
+  </div>
+  <div class="card">
+    <div class="pbadge">§8 — Stan nieruchomości w dniu aktu</div>
+    <div class="spar">Sprzedający zobowiązuje się, że w dniu podpisania umowy przyrzeczonej stan Nieruchomości będzie:<br><br>• Zgodny z dokumentacją zdjęciową wykonaną w dniu podpisania niniejszej umowy <em>(niepotrzebne skreślić)</em>.<br><br>• Całkowicie opróżniony ze wszystkich mebli, rzeczy ruchomych i wyposażenia, z wyjątkiem elementów trwale związanych z nieruchomością <em>(niepotrzebne skreślić)</em>.</div>
+    <div class="snote">Skreślenia nanoszone ręcznie przy podpisaniu</div>
+  </div>
+  <div class="card">
+    <div class="pbadge">§9 — Postanowienia ogólne</div>
+    <div class="spar">• Wszelkie zmiany dotyczące niniejszej Umowy muszą być dokonane na piśmie, w formie aneksu pod rygorem nieważności.<br><br>• W sprawach nieuregulowanych niniejszą Umową zastosowanie mają przepisy Kodeksu Cywilnego.</div>
+    <div class="snote">Zapis stały — bez edycji</div>
+  </div>
+  <div class="card">
+    <div class="pbadge">§10 — Egzemplarze</div>
+    <div class="spar">Umowa została sporządzona w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze Stron.</div>
+    <div class="snote">Zapis stały — bez edycji</div>
+  </div>
+  <div class="brow">
+    <button class="bs" onclick="go(3)">← Wstecz</button>
+    <button class="bp" onclick="go(5)">Dalej: Podgląd i druk →</button>
+  </div>
+</div>
+
+<!-- KROK 5 -->
+<div class="sec" id="s5">
+  <div class="stit">Podgląd pełnej umowy</div>
+  <div class="ssub">Krok 5 z 5 — sprawdź i wydrukuj</div>
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div class="ctit" style="margin-bottom:0">Gotowa umowa</div>
+      <button id="btn-edytuj" onclick="toggleEdit()" style="padding:4px 12px;border:0.5px solid var(--bd2);border-radius:var(--r);background:transparent;color:var(--tx2);font-size:11px;font-weight:500;cursor:pointer;font-family:inherit">✏️ Edytuj</button>
+    </div>
+    <div class="prevf" id="pvf" style="white-space:pre-wrap">Generuję…</div>
+    <textarea id="pvf-edit" style="display:none;width:100%;min-height:480px;padding:1.5rem;font-size:12px;line-height:2;font-family:inherit;background:var(--sur2);border:0.5px solid var(--bl);border-radius:var(--r);color:var(--tx);resize:vertical"></textarea>
+    <div id="edit-info" style="display:none;font-size:11px;color:var(--tx3);margin-top:6px;font-style:italic">Tryb edycji — zmiany widoczne w pobranym PDF</div>
+  </div>
+  <div class="brow">
+    <button class="bs" onclick="go(4)">← Wstecz</button>
+    <button class="bpr" onclick="drukuj()">Drukuj / Zapisz PDF</button>
+    <button class="br" onclick="if(confirm('Nowa umowa? Dane zostaną wyczyszczone.'))location.reload()">Nowa umowa</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ===== BAZA POŚREDNIKÓW (statyczna, bez fetch) =====
+const BAZA=[
+{id:"2792348500",name:"Paweł Danys",pesel:null,adres:"ul. Ostródzka 118A m.36, 03-289 Warszawa",dowod:null},
+{id:"2768493012",name:"Monika Prasał",pesel:"76071010240",adres:"26-225 Bębnów, Lipowa 2",dowod:"CFW 310175"},
+{id:"2768220769",name:"Aleksandra Julia Pocięgiel",pesel:"02280207429",adres:"Karmelicka 67/7",dowod:"DEF 603575"},
+{id:"2767880048",name:"Natalia Karolina Synak-Rzeczycka",pesel:"84101503048",adres:"ul. Rumiankowa 5, Kosowo",dowod:"dgt487438"},
+{id:"2728989569",name:"Magda Maria Podwojewska",pesel:"80062904546",adres:"ul. Strzegomska 14",dowod:"cdm283107"},
+{id:"2650797759",name:"Bartosz Maj",pesel:"88021017092",adres:"Jurajska 7, 25-640 Kielce",dowod:"DBR 537691"},
+{id:"2650789959",name:"Julia Paszko",pesel:"04250610325",adres:"Lipiny Dolne 155, 23-423 Potok Górny",dowod:"DBS 914833"},
+{id:"2650798184",name:"Monika Ogonowska",pesel:"98112002742",adres:"ul. Niepodległości 57/29, 10-044 Olsztyn",dowod:"CDL148669"},
+{id:"2650798193",name:"Ewa Wiśnios",pesel:"96021700089",adres:"ul. Nadmorska 66, 78-132 Grzybowo",dowod:"DIC 930890"},
+{id:"2650795429",name:"Daniel Mościński",pesel:"82071400734",adres:"ul. Kostromska 68/19, 97-300 Piotrków Trybunalski",dowod:"DBH 816532"},
+{id:"2650796025",name:"Tomasz Duda",pesel:"5270904951",adres:"Olbrachtów 120C, 68-200 Żary",dowod:"CHA116074"},
+{id:"2650797902",name:"Maciej Michał Majewski",pesel:"90072811938",adres:"Marcinkowo 179, 11-700 Mrągowo",dowod:"DCE139462"},
+{id:"2650795467",name:"Natalia Górecka",pesel:"03240701346",adres:"ul. Długa 34/17, Włocławek",dowod:"CHD 002080"},
+{id:"2650790067",name:"Jakub Filip Frącz",pesel:"01240804052",adres:"Pasieka Wałowska 11A, 96-200 Rawa Mazowiecka",dowod:"DAP 387930"},
+{id:"2650797760",name:"Marlena Anna Borkowska-Siedlarz",pesel:"95031504267",adres:"Ptaszkowa 870, 33-333 Ptaszkowa",dowod:"CEF 952744"},
+{id:"2650797260",name:"Martyna Biczel",pesel:"93061500927",adres:"Reymonta 17C, 59-900 Zgorzelec",dowod:"DCL827810"},
+{id:"2650797261",name:"Grzegorz Zaremba",pesel:"87090106270",adres:"Na Skarpie 10, 06-100 Pułtusk",dowod:"DIZ 895583"},
+{id:"2650797475",name:"Bartłomiej Tadeusz Laszuk",pesel:"92051102374",adres:"ul. Kościuszki 48/7, 14-500 Braniewo",dowod:"DGP606776"},
+{id:"2650795317",name:"Małgorzata Justyna Matuszyk",pesel:"95020900544",adres:"Os. Pod Skarpą 26/8, 34-100 Wadowice",dowod:"DID 862048"},
+{id:"2650797262",name:"Klaudia Magdalena Łuczak",pesel:"92061906887",adres:"ul. Zacisze 3, 42-450 Ciągowice",dowod:"Dbk 697349"},
+{id:"2650796028",name:"Władysław Zwiranowski",pesel:"00303110914",adres:"ul. Przyszła 5, 96-500 Sochaczew",dowod:"CHX 712080"},
+{id:"2650789845",name:"Paweł Sebastian Drzewiecki",pesel:"80053001531",adres:"ul. Modrakowa 76/44, 85-864 Bydgoszcz",dowod:"CCL 744530"},
+{id:"2650840421",name:"Marcin Brzostowski",pesel:"98012700395",adres:"Kalinowa 3, 12-200 Pisz",dowod:null},
+{id:"2650784291",name:"Aleksandra Chomka",pesel:"00271405265",adres:"Lipowa 38, 08-110 Rakowiec",dowod:"CHC 437429"},
+{id:"2650791928",name:"Daria Knappe",pesel:"86062907961",adres:"ul. o. S. Niedbały 7/2, 63-200 Jarocin",dowod:"CHZ 287544"},
+{id:"2650840383",name:"Alina Bułhak",pesel:"63112407521",adres:"ul. Za Wiatrakiem 5c/5, 72-006 Mierzyn",dowod:"CGM798242"},
+{id:"2650840384",name:"Magdalena Malińska",pesel:"92051703902",adres:"ul. Morenowa 9/89, 10-687 Bartąg",dowod:"DAR966672"},
+{id:"2650784059",name:"Natalia Pawłowska",pesel:"01272006967",adres:"Żeromskiego 4/1, 64-200 Wolsztyn",dowod:"CEJ 238107"},
+{id:"2650784176",name:"Justyna Wilkosz",pesel:"87113011228",adres:"ul. Barlickiego 10/16, 72-600 Świnoujście",dowod:"DBJ160046"},
+{id:"2650784055",name:"Barbara Polanowska",pesel:"71011006549",adres:"ul. Ofiar Katynia 10/58, 35-209 Rzeszów",dowod:"DCW 894824"},
+{id:"2650791803",name:"Olga Hryniewicz",pesel:"95050304327",adres:"Szafirowa 3, 62-200 Gniezno",dowod:"DEA 901827"},
+{id:"2650840312",name:"Bożena Ostrowska",pesel:"69080100163",adres:"Kromera 2/14, 85-790 Bydgoszcz",dowod:null},
+{id:"2650792147",name:"Beata Rydz",pesel:"87071712827",adres:"Tuwima 2, 17-100 Bielsk Podlaski",dowod:"DCJ 457646"},
+{id:"2650791796",name:"Aleksandra Gołąb",pesel:"04252608267",adres:"Koszalińska 98D/10, 78-400 Szczecinek",dowod:"DEK 227569"},
+{id:"2650840134",name:"Marlena Dróżdż",pesel:"88100313121",adres:"ul. Leśna 5, 05-300 Podrudzie",dowod:"DEV 883863"},
+{id:"2650791813",name:"Julia Szpoper",pesel:"97110404808",adres:"Towarowa 13/13, 64-100 Leszno",dowod:"DAE167207"},
+{id:"2650791366",name:"Dagmara Patrycja Kowal",pesel:"90022800885",adres:"Powstańców Śląskich 11, 55-110 Prusice",dowod:"DIR 399786"},
+{id:"2650791481",name:"Joanna Ziółkowska",pesel:"84050404304",adres:"Orla 49/64, 59-300 Lubin",dowod:"DFA 793553"},
+{id:"2650792150",name:"Magda Wójcik",pesel:"98040303289",adres:"Kawaleryjska 8/2, 20-552 Lublin",dowod:"CCD 888304"},
+{id:"2650840066",name:"Edyta Zimnicka",pesel:"97120402203",adres:"Pomorska 29/15, 44-335 Jastrzębie Zdrój",dowod:"DGF 380252"},
+{id:"2650840609",name:"Zuzanna Monika Cymańska",pesel:"02250504783",adres:"Wybickiego 16D/5, 87-100 Toruń",dowod:"CFB397874"},
+{id:"2653208899",name:"Rafał Ostrowski",pesel:"82061406814",adres:"Mostowa 18/2, 59-700 Bolesławiec",dowod:"DJA 065108"},
+{id:"2653354582",name:"Damian Jakub Rudyj",pesel:"95082213279",adres:"Buczki 3, 47-143 Buczki",dowod:"DAI 937958"},
+{id:"2653460580",name:"Agata Monika Gliniecka",pesel:"84040403425",adres:"Radosna Dolina 1, 83-304 Kosowo",dowod:"DCT 090753"},
+{id:"2653500121",name:"Paulina Krystyna Górska",pesel:"94010700863",adres:"Migdałowa 8, 68-111 Stary Żagań",dowod:"DBM765145"},
+{id:"2653491272",name:"Łukasz Krzysztof Pluta",pesel:"91081605699",adres:"Książ Wielki 17, 32-210 Moczydło",dowod:"DIP 912024"},
+{id:"2650840087",name:"Klaudia Żaneta Mochalska",pesel:"03302810083",adres:"Obozowa 32/34 m. 3, 62-800 Kalisz",dowod:"DCU 729623"},
+{id:"2671415926",name:"Natalia Maria Wołczyńska",pesel:"00301505220",adres:"Józefowska 57B, 26-617 Radom",dowod:"DJG763358"},
+{id:"2653477984",name:"Weronika Sakowska",pesel:"99041202843",adres:"Szmaragdowa 23/30",dowod:"DKS 290826"},
+{id:"2653478335",name:"Monika Katarzyna Malina",pesel:"88042015046",adres:"Trzebunia 710, 32-438 Trzebunia",dowod:"CCF863945"},
+{id:"2650792130",name:"Anna Lewandowska",pesel:"86051507444",adres:"ul. Głęboka 4B/16, 98-300 Wieluń",dowod:"DGE512298"},
+{id:"2717685177",name:"Magdalena Helena Aftanas",pesel:"85012809087",adres:"Stary Wielisław 135, 57-313",dowod:"DIK874886"},
+{id:"2738462411",name:"Maja Zawlik",pesel:"05251900886",adres:"Zawadka 1A, 62-641 Olszówka",dowod:"DBE 447320"},
+{id:"2743034129",name:"Monika Maćkowiak",pesel:"92110603424",adres:"Kukadło 2",dowod:"DAN864859"},
+{id:"2754180894",name:"Łukasz Rakowski",pesel:"79031800134",adres:"ul. Spacerowa 18, 05-152 Sowia Wola",dowod:"DEA784275"},
+{id:"2770674902",name:"Patrycja Agata Iskra",pesel:"94082709126",adres:"57-550 Stronie Śląskie",dowod:"DJH368211"},
+{id:"2812492358",name:"Błażej Braciszewski",pesel:"96070900959",adres:"ul. Świętokrzyska 52B, Chodzież",dowod:"CCS350321"},
+{id:"2812507297",name:"Karol Tomasz Strycharz",pesel:"04221804593",adres:"ul. Graniczna 8, Mirsk",dowod:"DKN075381"},
+{id:"2650797719",name:"Kinga Gielniewska",pesel:"95090204904",adres:"Batalionu Parasol 21/35, Płock",dowod:"DGP 563273"},
+{id:"2650790278",name:"Maciej Domagała",pesel:"73100408614",adres:"Grochowa 2 lok. 6, 53-424 Wrocław",dowod:"DEB 060282"},
+{id:"2650796290",name:"Marcin Wincek",pesel:"87082500279",adres:"Małachowskiego 1/9, Słupsk",dowod:"DAC 875546"},
+{id:"2650802989",name:"Patryk Piotrowski",pesel:"02270105955",adres:"ul. Cegielniana 3/1, 89-500 Tuchola",dowod:"DBR 425341"},
+{id:"2650798030",name:"Marcin Kelich",pesel:"77121303918",adres:"ul. Wyspiańskiego 11/8, 64-920 Piła",dowod:"DEU 251650"},
+{id:"2650795362",name:"Magdalena Mania",pesel:"80091908049",adres:"ul. Wyszyńskiego 58, 66-400 Gorzów Wlkp.",dowod:"DED 241681"},
+{id:"2650796044",name:"Karolina Sarnowska",pesel:"77042206004",adres:"ul. Mieleszyńska 32, 60-008 Poznań",dowod:"DHR 384057"},
+{id:"2650789954",name:"Dorota Orwat",pesel:"65102403902",adres:"Szamarzewskiego 103/3, 60-568 Poznań",dowod:"DIZ 587464"},
+{id:"2650798017",name:"Filip Ławniczak",pesel:"00322004911",adres:"ul. Spółdzielców 27/7, 62-510 Konin",dowod:"DIY 472882"},
+{id:"2650798115",name:"Monika Winiarska",pesel:"84070509841",adres:"ul. Zawadzkiego Zośki 57/13, 65-530 Zielona Góra",dowod:"DBC 931092"},
+{id:"2650797847",name:"Martyna Wilk-Kuryłowicz",pesel:"00290601923",adres:"ul. Obrońców Pokoju 20C/4, 67-200 Głogów",dowod:"DID 701138"},
+{id:"2650790335",name:"Patrycja Derda",pesel:"87020814662",adres:"ul. 22 Stycznia 8/2, 48-304 Nysa",dowod:null},
+{id:"2650790337",name:"Klaudiusz Borowski",pesel:"01260506819",adres:"Kościuszki 12/13, 40-049 Katowice",dowod:"DLA 022194"},
+{id:"2650796297",name:"Paulina Berlińska",pesel:"98041708984",adres:"ul. Wiosenna 23H, 41-253 Czeladź",dowod:null},
+{id:"2650806571",name:"Agnieszka Florek",pesel:"80033014443",adres:"Grondysa 45A/16, Bielsko-Biała",dowod:"CGY 013752"},
+{id:"2650800638",name:"Joanna Mościcka",pesel:"85013109124",adres:"ul. Robotnicza 204/11, 82-300 Elbląg",dowod:"DFL 994618"},
+{id:"2650784113",name:"Kornel Jagielski",pesel:"01301605194",adres:"ul. Żołnierska 14D/45, 10-561 Olsztyn",dowod:"CBV 526094"},
+{id:"2650799177",name:"Izabela Augustynowicz",pesel:"78110512423",adres:"ul. Konstytucji 3 Maja, 15-776 Białystok",dowod:"DAW 615096"},
+{id:"2650798408",name:"Wiesława Macielak",pesel:"66080809184",adres:"ul. Pułtuska 62a/17, 06-400 Ciechanów",dowod:"DKZ 779980"},
+{id:"2650840571",name:"Agnieszka Chmiel",pesel:"84091800943",adres:"Kochanowskiego 2, Sandomierz",dowod:"DFW 042604"},
+{id:"2650840068",name:"Magdalena Fliśnik",pesel:"98041508126",adres:"ul. Józefa Sowińskiego 3A, 32-020 Wieliczka",dowod:"DAW 362727"},
+{id:"2650840187",name:"Jakub Ćwiąkała",pesel:"00321503893",adres:"ul. Lanckorońska 2/3, 30-545 Kraków",dowod:"CCY 632980"},
+{id:"2650839932",name:"Justyna Goluch",pesel:"93071811527",adres:"ul. Kopisto 11/192, 35-315 Rzeszów",dowod:"DCL 771319"},
+{id:"2650840090",name:"Hubert Konsur",pesel:"98070605414",adres:"Cieszyna nr 152, 38-125",dowod:"CBW 594546"},
+{id:"2650799180",name:"Dawid Legejza",pesel:"96121910836",adres:"ul. Wita Stwosza 4A, 37-700 Przemyśl",dowod:"DIT 824800"},
+{id:"2650798630",name:"Martyna Ziarkiewicz",pesel:"83092804208",adres:"ul. Pułaskiego 8, 08-530 Dęblin",dowod:"DBD 145731"},
+{id:"2650798858",name:"Piotr Baran",pesel:"85021507598",adres:"Zajączkowice 2A, 27-425 Waśniów",dowod:"CBP 833770"},
+{id:"2650839859",name:"Marta Rotter",pesel:"92120112545",adres:"Kwiatowa 27, Bystre",dowod:"DBW 702739"},
+{id:"2650792129",name:"Paulina Błachnio",pesel:"89092901006",adres:"ul. Stamma 5/35, 84-300 Lębork",dowod:"CFX 913672"},
+{id:"2650798477",name:"Emilia Walczak",pesel:"99091608149",adres:"ul. Piaskowa 28/74, 23-200 Kraśnik",dowod:"CFU 509782"},
+{id:"2650791859",name:"Aleksandra Wojciechowska-Chudzak",pesel:"79031214283",adres:"Lipnica 8B, 64-551",dowod:"DAW 953406"}
+];
+
+// ===== STATE =====
+let TYP='o', SC=0, KMC=0, SEL=null, PMM='lista';
+
+// ===== INIT =====
+function init(){
+  const sel=document.getElementById('psel');
+  [...BAZA].sort((a,b)=>a.name.localeCompare(b.name,'pl')).forEach(p=>{
+    const o=document.createElement('option');
+    o.value=p.id; o.textContent=p.name; sel.appendChild(o);
+  });
+  document.getElementById('dz').value=new Date().toISOString().split('T')[0];
+  addS();
+}
+
+// ===== NAV =====
+function go(n){
+  if(n===5)buildFull();
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s'+n).classList.add('on');
+  for(let i=1;i<=5;i++){
+    const d=document.getElementById('si'+i);
+    d.classList.remove('active','done');
+    if(i<n)d.classList.add('done');
+    else if(i===n)d.classList.add('active');
+  }
+  window.scrollTo(0,0);
+}
+
+// ===== HELPERS =====
+function g(id){return(document.getElementById(id)?.value||'').trim();}
+function ph(v,f){return v||f;}
+function fD(d){if(!d)return null;const[y,m,day]=d.split('-');return day+'.'+m+'.'+y+' r.';}
+function fmtK(el){let v=el.value.replace(/\D/g,'').slice(0,26);let o='';for(let i=0;i<v.length;i++){if(i===2||(i>2&&(i-2)%4===0))o+=' ';o+=v[i];}el.value=o.trim();}
+function fmtKod(el){let v=el.value.replace(/\D/g,'').slice(0,5);if(v.length>2)v=v.slice(0,2)+'-'+v.slice(2);el.value=v;}
+function nA(raw){
+  if(!raw)return{t:null,w:true};
+  let s=raw.trim().replace(/\n/g,' ').replace(/\s+/g,' ');
+  s=s.replace(/^adres zamieszkania:?\s*/i,'').trim();
+  s=s.replace(/\s*;\s*/g,', ').replace(/\s*,\s*/g,', ').replace(/\s{2,}/g,' ');
+  const hc=/\b\d{2}-\d{3}\b/.test(s);
+  const jk=/^(WLA01G|LDZ01M|cc|Tuszyn)$/i.test(s.replace(/\s/g,''));
+  return{t:s,w:jk||(!hc&&s.length<10)};
+}
+
+// ===== SŁOWNIE =====
+const J=['','jeden','dwa','trzy','cztery','pięć','sześć','siedem','osiem','dziewięć'];
+const N=['dziesięć','jedenaście','dwanaście','trzynaście','czternaście','piętnaście','szesnaście','siedemnaście','osiemnaście','dziewiętnaście'];
+const D=['','','dwadzieścia','trzydzieści','czterdzieści','pięćdziesiąt','sześćdziesiąt','siedemdziesiąt','osiemdziesiąt','dziewięćdziesiąt'];
+const S=['','sto','dwieście','trzysta','czterysta','pięćset','sześćset','siedemset','osiemset','dziewięćset'];
+function t3(n){let s='';const se=Math.floor(n/100),r=n%100,d=Math.floor(r/10),j=r%10;if(se)s+=S[se]+' ';if(d===1){s+=N[j]+' ';}else{if(d)s+=D[d]+' ';if(j)s+=J[j]+' ';}return s.trim();}
+function mln(n){if(n===1)return'jeden milion';const j=n%10;if(j>=2&&j<=4&&!(n>=11&&n<=19))return t3(n)+' miliony';return t3(n)+' milionów';}
+function tys(n){if(n===1)return'tysiąc';const j=n%10;if(j>=2&&j<=4&&!(n>=11&&n<=19))return t3(n)+' tysiące';return t3(n)+' tysięcy';}
+function sl(n){if(!n||isNaN(n)||n<=0)return null;n=Math.floor(n);let r='';const m=Math.floor(n/1e6),t=Math.floor((n%1e6)/1e3),re=n%1e3;if(m)r+=mln(m)+' ';if(t)r+=tys(t)+' ';if(re)r+=t3(re);return r.trim();}
+
+// ===== TYP =====
+function setT(t){
+  TYP=t;
+  ['o','s','g'].forEach(x=>document.getElementById('t-'+x).classList.toggle('on',x===t));
+  document.getElementById('kwtog').style.display=t==='s'?'flex':'none';
+  up1();
+}
+function setT2(t){
+  TYP=t;
+  ['o','s','g','r'].forEach(x=>{
+    const tb=document.getElementById('t2'+x);
+    if(tb)tb.classList.toggle('on',x===t);
+    const fm=document.getElementById('f2'+x);
+    if(fm)fm.style.display=x===t?'block':'none';
+  });
+  up2();
+}
+function togSKW(){document.getElementById('skwg').style.display=document.getElementById('shkw').checked?'block':'none';up2();}
+function togHip(){document.getElementById('bhip').style.display=document.getElementById('chip').checked?'block':'none';up2();}
+function togEgz(){
+  const on=document.getElementById('cegz').checked;
+  document.getElementById('begz').style.display=on?'block':'none';
+  if(on&&document.getElementById('kml').children.length===0)addKM();
+  up2();
+}
+function addKM(){KMC++;const n=KMC;const d=document.createElement('div');d.className='kmrow';d.id='km'+n;d.innerHTML='<input type="text" id="kmi'+n+'" placeholder="np. KM 45/20" oninput="up2()"/><button class="brmk" onclick="rmKM('+n+')">×</button>';document.getElementById('kml').appendChild(d);up2();}
+function rmKM(n){const e=document.getElementById('km'+n);if(e)e.remove();up2();}
+function getKMs(){return Array.from(document.getElementById('kml').querySelectorAll('input')).map(i=>i.value.trim()).filter(Boolean);}
+
+// ===== PEŁNOMOCNIK =====
+function setPM(m){
+  PMM=m;
+  document.getElementById('ptl').classList.toggle('on',m==='lista');
+  document.getElementById('ptr').classList.toggle('on',m==='reczny');
+  document.getElementById('pml').style.display=m==='lista'?'block':'none';
+  document.getElementById('pmr').style.display=m==='reczny'?'block':'none';
+  up1();
+}
+function onPick(){
+  const id=g('psel');
+  SEL=BAZA.find(x=>x.id===id)||null;
+  const card=document.getElementById('pcard');
+  if(SEL){
+    const n=nA(SEL.adres);
+    document.getElementById('pcn').textContent=SEL.name;
+    document.getElementById('pcp').textContent=SEL.pesel||'— brak';
+    document.getElementById('pca').textContent=n.t||'— brak';
+    document.getElementById('pcd').textContent=SEL.dowod||'— brak';
+    document.getElementById('pcw').style.display=n.w?'inline-flex':'none';
+    card.style.display='block';
+  }else{card.style.display='none';}
+  up1();
+}
+function getPD(){
+  if(PMM==='reczny'){
+    const name=g('rn');
+    if(!name)return null;
+    const plec=document.getElementById('rplec')?.value||'m';
+    return{name,pesel:g('rp')||'_______',adres:g('ra')||'_______',plec};
+  }
+  if(!SEL)return null;
+  const n=nA(SEL.adres);
+  const plec=document.getElementById('pplec')?.value||'m';
+  return{name:SEL.name,pesel:SEL.pesel||'_______',adres:n.t||'_______',plec};
+}
+
+// ===== SPRZEDAJĄCY =====
+function addS(){
+  const lista=document.getElementById('sl');
+  if(lista.querySelectorAll('.sblock').length>=4)return;
+  SC++;const n=SC;
+  const div=document.createElement('div');
+  div.className='sblock';div.id='sb'+n;
+  div.innerHTML=`<div class="shead"><span class="snr" id="sn${n}">Sprzedający ${lista.querySelectorAll('.sblock').length+1}</span><button class="brm" onclick="rmS(${n})">usuń</button></div>
+<div class="row r2"><div class="fg"><label>Imię</label><input type="text" id="sprim${n}" placeholder="np. Anna" oninput="up1()"/></div><div class="fg"><label>Nazwisko</label><input type="text" id="sprna${n}" placeholder="np. Kowalska" oninput="up1()"/></div></div>
+<div class="row r2" style="margin-bottom:6px"><div class="fg"><label>Płeć</label><select id="sp${n}" onchange="up1()"><option value="k">Kobieta</option><option value="m">Mężczyzna</option></select></div><div></div></div>
+<div class="chk"><input type="checkbox" id="sr${n}" checked onchange="togR(${n})"/><label for="sr${n}">Uwzględnij imiona rodziców</label></div>
+<div id="srd${n}" class="row r2"><div class="fg"><label>Imię ojca</label><input type="text" id="soj${n}" placeholder="np. Jan" oninput="up1()"/></div><div class="fg"><label>Imię matki</label><input type="text" id="sma${n}" placeholder="np. Maria" oninput="up1()"/></div></div>
+<div class="row r1"><div class="fg"><label>Ulica</label><input type="text" id="sul${n}" placeholder="np. Kwiatowa" oninput="up1()"/></div></div>
+<div class="row r3"><div class="fg"><label>Nr budynku</label><input type="text" id="snb${n}" placeholder="12" oninput="up1()"/></div><div class="fg"><label>Nr mieszkania</label><input type="text" id="snm${n}" placeholder="opt." oninput="up1()"/></div><div class="fg"><label>Kod pocztowy</label><input type="text" id="skd${n}" placeholder="00-000" maxlength="6" oninput="fmtKod(this);up1()"/></div></div>
+<div class="row r1"><div class="fg"><label>Miasto</label><input type="text" id="sms${n}" placeholder="np. Kraków" oninput="up1()"/></div></div>
+<div style="border-top:0.5px solid var(--bd);margin-top:10px;padding-top:10px">
+<div class="chk"><input type="checkbox" id="spm${n}" onchange="togPM(${n})"/><label for="spm${n}" style="font-size:12px;font-weight:500;color:var(--tx)">Sprzedający reprezentowany przez pełnomocnika</label></div>
+<div id="spmd${n}" style="display:none"><div class="row r2"><div class="fg"><label>Imię i nazwisko pełnomocnika</label><input type="text" id="spmi${n}" placeholder="np. Jan Nowak" oninput="up1()"/></div><div class="fg"><label>PESEL pełnomocnika</label><input type="text" id="spmp${n}" placeholder="np. 80010112345" maxlength="11" oninput="up1()"/></div></div></div>
+</div>`;
+  lista.appendChild(div);
+  renum();updBtn();up1();
+}
+function rmS(n){const e=document.getElementById('sb'+n);if(e)e.remove();renum();updBtn();up1();}
+function renum(){
+  const bl=document.querySelectorAll('.sblock');
+  bl.forEach((b,i)=>{const e=b.querySelector('[id^="sn"]');if(e)e.textContent='Sprzedający '+(i+1);});
+  document.getElementById('bsol').style.display=bl.length>1?'flex':'none';
+}
+function updBtn(){document.getElementById('badd').disabled=document.querySelectorAll('.sblock').length>=4;}
+function togR(n){document.getElementById('srd'+n).style.display=document.getElementById('sr'+n).checked?'grid':'none';up1();}
+function togPM(n){document.getElementById('spmd'+n).style.display=document.getElementById('spm'+n).checked?'block':'none';up1();}
+
+function getSA(n){
+  const u=g('sul'+n),b=g('snb'+n),m=g('snm'+n),k=g('skd'+n),c=g('sms'+n);
+  let a='';if(u)a+='ul. '+u;if(b)a+=' '+b;if(m)a+='/'+m;if(k)a+=', '+k;if(c)a+=' '+c;return a;
+}
+function buildS(n,idx,total){
+  const im=(document.getElementById('sprim'+n)?.value||'').trim();
+  const na=(document.getElementById('sprna'+n)?.value||'').trim();
+  const iN=(im&&na)?im+' '+na:(im||na||'______________________');
+  const pl=document.getElementById('sp'+n)?.value||'k';
+  const shr=document.getElementById('sr'+n)?.checked;
+  const oj=g('soj'+n)||'_______',ma=g('sma'+n)||'_______';
+  const adr=getSA(n)||'ul. ____________________________________________';
+  const leg=pl==='k'?'legitymującą się':'legitymującym się';
+  const cs=pl==='k'?'córką':'synem';
+  const rd=shr?', '+cs+' '+oj+' i '+ma:'';
+  const hpm=document.getElementById('spm'+n)?.checked;
+  const pmi=g('spmi'+n)||'______________________';
+  const pmp=g('spmp'+n)||'_______________________';
+  const pmf=hpm?',\n\nreprezentowany przez '+pmi+', legitymującego się numerem PESEL: '+pmp:'';
+  const zw=total===1?(pl==='k'?'\n\nzwaną dalej Sprzedającym,':'\n\nzwanym dalej Sprzedającym,'):'';
+  return idx+'. '+iN+rd+', zam. '+adr+', '+leg+' dowodem osobistym seria i numer: ____________________, PESEL: ____________________,'+pmf+zw;
+}
+
+// ===== UP1 =====
+function up1(){
+  const mZ=g('mz')||'___________',dZ=fD(g('dz'))||'___________';
+  const bls=document.querySelectorAll('.sblock'),total=bls.length;
+  const ids=Array.from(bls).map(b=>b.id.replace('sb',''));
+  let sp=ids.map((n,i)=>buildS(n,i+1,total)).join('\n\n');
+  if(total>1)sp+='\n\nzwanymi dalej łącznie Sprzedającymi,';
+  const p=getPD();
+  const pm=p?p.name+', zam. '+p.adres+', PESEL: '+p.pesel:'(wybierz lub wpisz pełnomocnika)';
+  const dzialajacy=p?(p.plec==='k'?'działająca':'działającego'):'działającego';
+  const hkw=document.getElementById('hkw').checked;
+  const tl=TYP==='o'?'Lokal — odrębna własność':TYP==='s'?'Spółdzielcze własnościowe'+(hkw?' (z KW)':' (bez KW)'):'Nieruchomość gruntowa';
+  const t='<div style="text-align:center;font-weight:600;margin-bottom:6px">UMOWA PRZEDWSTĘPNA KUPNA – SPRZEDAŻY NIERUCHOMOŚCI</div>'
+    +'zawarta w '+mZ+' dnia '+dZ+' pomiędzy:<br><br>'
+    +sp.replace(/\n\n/g,'<br>').replace(/\n/g,' ')
+    +'<br>a<br>'
+    +(ids.length+1)+'. firmą KMBNO Sp. z o. o. z siedzibą przy ul. Twarda 18, 00-105 Warszawa, NIP: 5252862330, REGON: 388950413, KRS: 0000899554, reprezentowaną przy niniejszej umowie przez pełnomocnika '+pm+', '+dzialajacy+' jako Pełnomocnik spółki KMBNO Sp. z o. o.,<br>'
+    +'zwaną dalej Kupującym,<br>zwanymi dalej łącznie Stronami.';
+  const box=document.getElementById('pv1');
+  box.style.fontStyle='normal';box.style.color='';
+  box.innerHTML=t;
+}
+
+// ===== UP2 =====
+function bP1(){
+  if(TYP==='r'){
+    const rc=(document.getElementById('rpar')?.value||'').trim();
+    return '§ 1\n\nSprzedający oświadcza, że:\n\n'+(rc||'(wpisz treść §1 w polu powyżej)');
+  }
+  let core='';
+  if(TYP==='o'){
+    const nr=ph(g('onr'),'____'),ms=ph(g('oms'),'______________________________'),ul=ph(g('oul'),'______________________________'),pw=ph(g('opw'),'_____'),kw=ph(g('okw'),'______________________________');
+    core='• Jest właścicielem lokalu stanowiącego odrębną nieruchomość o numerze '+nr+' położonego w '+ms+' przy ulicy '+ul+', o powierzchni użytkowej '+pw+' m², dla którego prowadzona jest księga wieczysta numer '+kw+', zwanego dalej Nieruchomością.\n\n• Nieruchomość nie jest przedmiotem praw lub roszczeń osób trzecich, ograniczeń w rozporządzaniu oraz umów, z których wynikałoby zobowiązanie do jej zbycia na rzecz jakichkolwiek osób i nie jest obciążona ograniczonymi prawami rzeczowymi.';
+  }else if(TYP==='s'){
+    const nr=ph(g('snr'),'____'),ms=ph(g('sms'),'______________________________'),ul=ph(g('sul'),'______________________________'),pw=ph(g('spw'),'_____');
+    const hk=document.getElementById('shkw').checked,kw=ph(g('skw'),'______________________________');
+    const kwF=hk?', dla którego prowadzona jest księga wieczysta numer '+kw:'';
+    core='• Przysługuje mu spółdzielcze własnościowe prawo do lokalu mieszkalnego o numerze '+nr+' położonego w '+ms+' przy ulicy '+ul+', o powierzchni użytkowej '+pw+' m²'+kwF+', zwane dalej Nieruchomością.\n\n• Nieruchomość nie jest przedmiotem praw lub roszczeń osób trzecich, ograniczeń w rozporządzaniu oraz umów, z których wynikałoby zobowiązanie do jej zbycia na rzecz jakichkolwiek osób i nie jest obciążona ograniczonymi prawami rzeczowymi.';
+  }else{
+    const dz=ph(g('gdz'),'_____________'),ms=ph(g('gms'),'______________________________'),ul=ph(g('gul'),'______________________________'),pw=ph(g('gpw'),'_____'),kw=ph(g('gkw'),'______________________________');
+    const zF=document.getElementById('gzab').checked?', zabudowanej oddanym do użytkowania budynkiem':'';
+    core='• Jest właścicielem nieruchomości gruntowej stanowiącej działkę ewidencyjną o numerze '+dz+' położonej w '+ms+' przy ulicy '+ul+', o powierzchni '+pw+' HA, dla której prowadzona jest księga wieczysta numer '+kw+zF+', zwanej dalej Nieruchomością.\n\n• Nieruchomość nie jest przedmiotem praw lub roszczeń osób trzecich, ograniczeń w rozporządzaniu oraz umów, z których wynikałoby zobowiązanie do jej zbycia na rzecz jakichkolwiek osób i nie jest obciążona ograniczonymi prawami rzeczowymi.';
+  }
+  let ob='';
+  if(document.getElementById('chip').checked){const w=g('hipw')||'nazwa wierzyciela';ob+='\n\n• W dziale IV Księgi Wieczystej Nieruchomości widnieje hipoteka umowna '+w+'. Sprzedający oświadcza, że hipoteka zostanie w całości spłacona przy umowie przyrzeczonej z części ceny sprzedaży po przedłożeniu promesy, bądź do umowy przyrzeczonej okaże stosowne zaświadczenie do wykreślenia hipoteki z Księgi Wieczystej.';}
+  if(document.getElementById('cegz').checked){const kms=getKMs();const ks=kms.length>0?kms.map(s=>'w sprawie '+s).join(', '):'w sprawie KM ____';ob+='\n\n• W dziale III Księgi Wieczystej Nieruchomości widnieje wpis wszczęcia egzekucji '+ks+'. Sprzedający oświadcza, że zadłużenie to zostanie w całości spłacone przy umowie przyrzeczonej z części ceny sprzedaży po przedłożeniu promesy wierzyciela, bądź do umowy przyrzeczonej okaże stosowne zaświadczenie do wykreślenia wszczęcia egzekucji.';}
+  return '§ 1\n\nSprzedający oświadcza, że:\n\n'+core+ob;
+}
+function fmtPrev(tekst){
+  const linie=tekst.split('\n');
+  let html='';
+  linie.forEach(l=>{
+    const trimmed=l.trim();
+    if(/^§\s*\d+$/.test(trimmed)){
+      html+='<div style="text-align:center;font-weight:600;margin:6px 0 2px">'+trimmed+'</div>';
+    } else if(trimmed===''){
+      html+='<div style="margin:0"></div>';
+    } else {
+      html+='<div style="margin-bottom:2px;text-align:justify">'+trimmed+'</div>';
+    }
+  });
+  return html;
+}
+function up2(){
+  const box=document.getElementById('pv2');
+  box.style.fontStyle='normal';box.style.color='';
+  box.innerHTML=fmtPrev(bP1());
+}
+function up3r(){
+  const box=document.getElementById('pv3');
+  box.style.fontStyle='normal';box.style.color='';
+  box.innerHTML=fmtPrev(bP3());
+}
+
+// ===== UP3 =====
+function togG(){
+  const on=document.getElementById('gotow').checked;
+  document.getElementById('ginfo').style.display=on?'block':'none';
+  document.getElementById('kontorow').style.display=on?'none':'grid';
+  document.getElementById('tzadrow').style.display=on?'none':'grid';
+  up3();
+}
+function bP3(){
+  const cv=parseFloat(g('cena')),zv=parseFloat(g('zad'));
+  const csl=sl(cv),zsl=sl(zv);
+  document.getElementById('csl').textContent=csl?csl+' złotych':'—';
+  document.getElementById('zsl').textContent=zsl?zsl+' złotych':'—';
+  const cS=cv?cv.toLocaleString('pl-PL')+' PLN':'____________________';
+  const cSl=csl?csl+' zł':'____________________________________________________________';
+  const zS=zv?zv.toLocaleString('pl-PL')+' PLN':'________________________________________';
+  const zSl=zsl?zsl+' zł':'____________________________________________________________';
+  const kt=g('konto')||'__________________________________________________________________________________________';
+  const ta=g('takt');const taS=ta?fD(ta):'____________________';
+  const tz=g('tzad')||'3';const tzS=(['2','3'].includes(tz)?tz+' dni robocze':tz+' dni roboczych');
+  const total=document.querySelectorAll('.sblock').length;
+  const solZ=total>1?'zwrócą Oni solidarnie Kupującemu':'zwróci On Kupującemu';
+  const isG=document.getElementById('gotow').checked;
+  const plat=isG?'Wskazaną kwotę Kupujący zapłacił gotówką, co Sprzedający niniejszym potwierdza.':'Wskazaną kwotę Kupujący zapłaci przelewem, na rachunek bankowy Sprzedającego o numerze '+kt+', w terminie '+tzS+' od podpisania niniejszej Umowy, na co Sprzedający niniejszym wyraża zgodę.';
+  document.getElementById('solinfo').style.display=total>1?'block':'none';
+  return '§ 3\n\nSprzedający oświadcza, że zobowiązuje się sprzedać Kupującemu opisaną w § 1 Nieruchomość za cenę w kwocie '+cS+' (słownie: '+cSl+').\n\n§ 4\n\nStrony zgodnie oświadczają, że umowa przyrzeczona kupna – sprzedaży przedmiotowej Nieruchomości zostanie zawarta do dnia '+taS+'.\n\n§ 5\n\n• Na mocy niniejszej Umowy Kupujący wniesie na rzecz Sprzedającego tytułem kupna Nieruchomości zadatek, w rozumieniu art. 394 KC, w kwocie '+zS+' (słownie: '+zSl+').\n\n• '+plat+'\n\n• W razie niewykonania niniejszej Umowy przez Sprzedającego, '+solZ+' kwotę zadatku w podwójnej wysokości.\n\n• W razie niewykonania Umowy przez Kupującego, traci On zadatek na rzecz Sprzedającego.\n\n§ 6\n\nWraz z zawarciem przez Strony przyrzeczonej umowy kupna – sprzedaży Nieruchomości, kwota zadatku szczegółowo określona w § 5 niniejszej Umowy, zostanie zaliczona na poczet ceny sprzedaży Nieruchomości.';
+}
+function up3(){
+  const box=document.getElementById('pv3');
+  box.style.fontStyle='normal';box.style.color='';
+  box.innerHTML=fmtPrev(bP3());
+}
+
+// ===== PEŁNA UMOWA =====
+const P2='§ 2\n\nPrzedmiotem niniejszej Umowy jest sprzedaż na rzecz Kupującego Nieruchomości, szczegółowo opisanej w § 1 niniejszej Umowy.';
+const P7='§ 7\n\nSprzedający, od dnia zawarcia niniejszej umowy do dnia zawarcia umowy przyrzeczonej, zobowiązuje się powstrzymać od wszelkich czynności mających na celu sprzedaż Nieruchomości osobom trzecim, w szczególności od zamieszczania ofert jej sprzedaży za pośrednictwem sieci Internet lub kontaktu z podmiotami z zakresu obrotu nieruchomościami. W przypadku, gdyby Sprzedający naruszył opisane zobowiązanie, Kupujący jest uprawniony do dochodzenia odszkodowania na zasadach ogólnych.';
+const P8='§ 8\n\nSprzedający zobowiązuje się, że w dniu podpisania umowy przyrzeczonej stan Nieruchomości będzie:\n\n• Zgodny z dokumentacją zdjęciową wykonaną w dniu podpisania niniejszej umowy (niepotrzebne skreślić).\n\n• Całkowicie opróżniony ze wszystkich mebli, rzeczy ruchomych i wyposażenia, z wyjątkiem elementów trwale związanych z nieruchomością (niepotrzebne skreślić).';
+const P9='§ 9\n\n• Wszelkie zmiany dotyczące niniejszej Umowy muszą być dokonane na piśmie, w formie aneksu pod rygorem nieważności.\n\n• W sprawach nieuregulowanych niniejszą Umową zastosowanie mają przepisy Kodeksu Cywilnego.';
+const P10='§ 10\n\nUmowa została sporządzona w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze Stron.';
+
+function bHead(){
+  const mZ=g('mz')||'___________',dZ=fD(g('dz'))||'___________';
+  const bls=document.querySelectorAll('.sblock'),total=bls.length;
+  const ids=Array.from(bls).map(b=>b.id.replace('sb',''));
+  let sp=ids.map((n,i)=>buildS(n,i+1,total)).join('\n\n');
+  if(total>1)sp+='\n\nzwanymi dalej łącznie Sprzedającymi,';
+  const p=getPD();
+  const pm=p?p.name+', zam. '+p.adres+', PESEL: '+p.pesel:'(wybierz lub wpisz pełnomocnika)';
+  const dzialajacy=p?(p.plec==='k'?'działająca':'działającego'):'działającego';
+  return 'UMOWA PRZEDWSTĘPNA KUPNA – SPRZEDAŻY NIERUCHOMOŚCI\n\nzawarta w '+mZ+' dnia '+dZ+' pomiędzy:\n\n'+sp+'\n\na\n\n'+(ids.length+1)+'. firmą KMBNO Sp. z o. o. z siedzibą przy ul. Twarda 18, 00-105 Warszawa, NIP: 5252862330, REGON: 388950413, KRS: 0000899554, reprezentowaną przy niniejszej umowie przez pełnomocnika '+pm+', '+dzialajacy+' jako Pełnomocnik spółki KMBNO Sp. z o. o.,\n\nzwaną dalej Kupującym,\nzwanymi dalej łącznie Stronami.';
+}
+
+function bPodp(){
+  const bls=document.querySelectorAll('.sblock');
+  if(bls.length<=2){
+    return '\n\n                    SPRZEDAJĄCY                                                       KUPUJĄCY\n\n\n      __________________________                               __________________________\n      czytelny podpis imię i nazwisko                          czytelny podpis imię i nazwisko';
+  }
+  let s='\n\n                    SPRZEDAJĄCY\n\n';
+  Array.from(bls).forEach((_,i)=>{s+='\n      __________________________\n      Sprzedający '+(i+1)+' — czytelny podpis\n';});
+  s+='\n\n                    KUPUJĄCY\n\n      __________________________\n      czytelny podpis imię i nazwisko';
+  return s;
+}
+
+function buildFull(){
+  const parts=[bHead(),bP1(),P2,bP3(),P7,P8,P9,P10,bPodp()];
+  document.getElementById('pvf').textContent=parts.join('\n\n');
+}
+
+// ===== BUDOWANIE HTML UMOWY DO DRUKU =====
+function buildHtmlUmowy(){
+  // Zbierz dane z każdego kroku
+  const mZ=g('mz')||'___________', dZ=fD(g('dz'))||'___________';
+  const bls=document.querySelectorAll('.sblock'), total=bls.length;
+  const ids=Array.from(bls).map(b=>b.id.replace('sb',''));
+  let spHtml=ids.map((n,i)=>buildS(n,i+1,total)).map(s=>
+    '<p style="margin-bottom:0.4em">'+s.replace(/\n\n/g,'</p><p style="margin-bottom:0.4em">').replace(/\n/g,'<br>')+'</p>'
+  ).join('<p style="margin-bottom:0.4em">&nbsp;</p>');
+  if(total>1) spHtml+='<p style="margin-bottom:0.4em"><br>zwanymi dalej łącznie Sprzedającymi,</p>';
+
+  const p=getPD();
+  const pm=p?p.name+', zam. '+p.adres+', PESEL: '+p.pesel:'(wybierz lub wpisz pełnomocnika)';
+  const dzialajacy=p?(p.plec==='k'?'działająca':'działającego'):'działającego';
+  const tl=TYP==='o'?'Lokal — odrębna własność':TYP==='s'?'Spółdzielcze własnościowe':'Nieruchomość gruntowa';
+
+  const U20='<span style="display:inline-block;min-width:4em;border-bottom:1px solid #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+  const U30='<span style="display:inline-block;min-width:6em;border-bottom:1px solid #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+  const U60='<span style="display:inline-block;min-width:11em;border-bottom:1px solid #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+  const U90='<span style="display:block;width:100%;border-bottom:1px solid #000;margin:0.15em 0;">&nbsp;</span>';
+
+  function par(nr, tresc){
+    let t=tresc
+      .replace(/_{90,}/g, U90)
+      .replace(/_{60,}/g, U60)
+      .replace(/_{30,}/g, U30)
+      .replace(/_{20,}/g, U20)
+      .replace(/_{10,}/g, U20);
+    const linie=t.split('\n').filter(l=>l.trim());
+    let html='<div class="par"><p class="par-nr">§ '+nr+'</p>';
+    let bufor='';
+    linie.forEach(l=>{
+      if(l.startsWith('•')){
+        if(bufor){html+='<p class="par-txt">'+bufor+'</p>';bufor='';}
+        html+='<p class="par-pkt">'+l+'</p>';
+      } else {
+        bufor+=l+' ';
+      }
+    });
+    if(bufor) html+='<p class="par-txt">'+bufor.trim()+'</p>';
+    html+='</div>';
+    return html;
+  }
+
+  // §1 content
+  const par1raw=bP1().replace('§ 1\n\nSprzedający oświadcza, że:\n\n','');
+  // §3-6 content
+  const par36=bP3();
+  const p3=par36.match(/§ 3\n\n([\s\S]*?)(?=\n\n§ 4)/)?.[1]||'';
+  const p4=par36.match(/§ 4\n\n([\s\S]*?)(?=\n\n§ 5)/)?.[1]||'';
+  const p5=par36.match(/§ 5\n\n([\s\S]*?)(?=\n\n§ 6)/)?.[1]||'';
+  const p6=par36.match(/§ 6\n\n([\s\S]*?)$/)?.[1]||'';
+
+  // Podpisy
+  const bls2=document.querySelectorAll('.sblock');
+  let podpisyHtml='';
+  if(bls2.length<=2){
+    podpisyHtml=`<table class="podpisy"><tr>
+      <td><p class="podp-label">SPRZEDAJĄCY</p><p class="podp-linia">__________________________</p><p class="podp-sub">czytelny podpis imię i nazwisko</p></td>
+      <td><p class="podp-label">KUPUJĄCY</p><p class="podp-linia">__________________________</p><p class="podp-sub">czytelny podpis imię i nazwisko</p></td>
+    </tr></table>`;
+  } else {
+    podpisyHtml='<p class="podp-label" style="margin-top:2em">SPRZEDAJĄCY</p>';
+    Array.from(bls2).forEach((_,i)=>{
+      podpisyHtml+=`<p class="podp-linia" style="margin-top:1.5em">__________________________</p><p class="podp-sub">Sprzedający ${i+1} — czytelny podpis</p>`;
+    });
+    podpisyHtml+=`<p class="podp-label" style="margin-top:2em">KUPUJĄCY</p><p class="podp-linia" style="margin-top:1.5em">__________________________</p><p class="podp-sub">czytelny podpis imię i nazwisko</p>`;
+  }
+
+  return `<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Umowa Przedwstępna — KMBNO</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Times New Roman",Times,serif;font-size:10pt;line-height:1.5;color:#000;background:#fff}
+.strona{max-width:21cm;margin:0 auto;padding:1.8cm 2.2cm}
+.tytul{text-align:center;font-weight:bold;font-size:11pt;margin-bottom:0.8em;text-transform:uppercase;letter-spacing:0.03em}
+.zawarta{text-align:left;margin-bottom:0.8em;font-size:10pt}
+.strony{margin-bottom:0.8em;font-size:10pt;line-height:1.5}
+.strony p{margin-bottom:0.2em}
+.lacze{text-align:left;margin:0.3em 0;font-size:10pt}
+.par{margin-bottom:0.8em}
+.par-nr{text-align:center;font-weight:bold;font-size:10pt;margin-bottom:0.25em}
+.par-txt{text-align:justify;font-size:10pt;line-height:1.5;margin-bottom:0.2em}
+.par-pkt{font-size:10pt;line-height:1.5;margin-bottom:0.2em;padding-left:1em;text-indent:-1em;text-align:justify}
+.podpisy{width:100%;margin-top:2em;border-collapse:collapse}
+.podpisy td{width:50%;vertical-align:top;padding:0 1em}
+.podpisy td:first-child{padding-left:0}
+.podp-label{font-weight:bold;font-size:10pt;margin-bottom:2em;text-align:center}
+.podp-linia{font-size:10pt;border-top:1px solid #000;padding-top:0.3em;text-align:center;margin:0 auto;width:80%}
+.podp-sub{font-size:8.5pt;text-align:center;margin-top:0.2em;color:#333}
+.druk-btn{text-align:center;margin-bottom:1cm;display:flex;gap:10px;justify-content:center}
+button{padding:10px 24px;font-size:13px;background:#185FA5;color:#fff;border:none;border-radius:6px;cursor:pointer}
+button.sec{background:#fff;color:#185FA5;border:1px solid #185FA5}
+@media print{.druk-btn{display:none!important}}
+</style>
+</head>
+<body>
+<div class="strona">
+<div class="druk-btn">
+  <button onclick="window.print()">Zapisz jako PDF / Drukuj</button>
+  <button class="sec" onclick="window.close()">Zamknij</button>
+</div>
+<p class="tytul">UMOWA PRZEDWSTĘPNA KUPNA – SPRZEDAŻY NIERUCHOMOŚCI</p>
+<p class="zawarta">zawarta w ${mZ} dnia ${dZ} pomiędzy:</p>
+<div class="strony">
+${spHtml}
+<p class="lacze">a</p>
+<p style="margin-bottom:0.3em;font-size:10.5pt;line-height:1.7;text-align:justify">${ids.length+1}. firmą KMBNO Sp. z o. o. z siedzibą przy ul. Twarda 18, 00-105 Warszawa, NIP: 5252862330, REGON: 388950413, KRS: 0000899554, reprezentowaną przy niniejszej umowie przez pełnomocnika ${pm}, ${dzialajacy} jako Pełnomocnik spółki KMBNO Sp. z o. o.,</p>
+<p style="margin-top:0.5em;font-size:10.5pt">zwaną dalej Kupującym,<br>zwanymi dalej łącznie Stronami.</p>
+</div>
+
+${par('1','Sprzedający oświadcza, że:\n\n'+par1raw)}
+${par('2','Przedmiotem niniejszej Umowy jest sprzedaż na rzecz Kupującego Nieruchomości, szczegółowo opisanej w § 1 niniejszej Umowy.')}
+${par('3',p3)}
+${par('4',p4)}
+${par('5',p5)}
+${par('6',p6)}
+${par('7','Sprzedający, od dnia zawarcia niniejszej umowy do dnia zawarcia umowy przyrzeczonej, zobowiązuje się powstrzymać od wszelkich czynności mających na celu sprzedaż Nieruchomości osobom trzecim, w szczególności od zamieszczania ofert jej sprzedaży za pośrednictwem sieci Internet lub kontaktu z podmiotami z zakresu obrotu nieruchomościami. W przypadku, gdyby Sprzedający naruszył opisane zobowiązanie, Kupujący jest uprawniony do dochodzenia odszkodowania na zasadach ogólnych.')}
+${par('8','Sprzedający zobowiązuje się, że w dniu podpisania umowy przyrzeczonej stan Nieruchomości będzie:\n\n• Zgodny z dokumentacją zdjęciową wykonaną w dniu podpisania niniejszej umowy <b>(niepotrzebne skreślić)</b>.\n\n• Całkowicie opróżniony ze wszystkich mebli, rzeczy ruchomych i wyposażenia, z wyjątkiem elementów trwale związanych z nieruchomością <b>(niepotrzebne skreślić)</b>.')}
+${par('9','• Wszelkie zmiany dotyczące niniejszej Umowy muszą być dokonane na piśmie, w formie aneksu pod rygorem nieważności.\n\n• W sprawach nieuregulowanych niniejszą Umową zastosowanie mają przepisy Kodeksu Cywilnego.')}
+${par('10','Umowa została sporządzona w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze Stron.')}
+
+${podpisyHtml}
+</div>
+</body>
+</html>`;
+}
+
+// ===== TRYB EDYCJI =====
+let editMode=false;
+function toggleEdit(){
+  editMode=!editMode;
+  const pvf=document.getElementById('pvf');
+  const edit=document.getElementById('pvf-edit');
+  const btn=document.getElementById('btn-edytuj');
+  const info=document.getElementById('edit-info');
+  if(editMode){
+    edit.value=pvf.textContent||'';
+    pvf.style.display='none';
+    edit.style.display='block';
+    info.style.display='block';
+    btn.textContent='✓ Zakończ edycję';
+    btn.style.color='var(--gnd)';
+    btn.style.borderColor='var(--gn)';
+  } else {
+    pvf.textContent=edit.value;
+    pvf.style.display='block';
+    edit.style.display='none';
+    info.style.display='none';
+    btn.textContent='✏️ Edytuj';
+    btn.style.color='var(--tx2)';
+    btn.style.borderColor='var(--bd2)';
+  }
+}
+
+// ===== DRUK / PDF =====
+function drukuj(){
+  const tekst=document.getElementById('pvf').textContent||'';
+  if(!tekst.trim()){alert('Brak treści umowy. Wróć i wypełnij dane.');return;}
+  const html=buildHtmlUmowy();
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='umowa_przedwstepna_KMBNO.html';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},1500);
+}
+
+init();
+</script>
+</body>
+</html>
