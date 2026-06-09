@@ -796,10 +796,10 @@ function buildHtmlUmowy(){
   const dzialajacy=p?(p.plec==='k'?'działająca':'działającego'):'działającego';
   const tl=TYP==='o'?'Lokal — odrębna własność':TYP==='s'?'Spółdzielcze własnościowe':'Nieruchomość gruntowa';
 
-  const U20='<span style="display:inline-block;min-width:4em;border-bottom:1px solid #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-  const U30='<span style="display:inline-block;min-width:6em;border-bottom:1px solid #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-  const U60='<span style="display:inline-block;min-width:11em;border-bottom:1px solid #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-  const U90='<span style="display:block;width:100%;border-bottom:1px solid #000;margin:0.15em 0;">&nbsp;</span>';
+  const U20='<span style="display:inline;border-bottom:1px solid #000;white-space:nowrap;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+  const U30='<span style="display:inline;border-bottom:1px solid #000;white-space:nowrap;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+  const U60='<span style="display:inline;border-bottom:1px solid #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+  const U90='<span style="display:inline;border-bottom:1px solid #000;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
 
   function par(nr, tresc){
     let t=tresc
@@ -808,18 +808,22 @@ function buildHtmlUmowy(){
       .replace(/_{30,}/g, U30)
       .replace(/_{20,}/g, U20)
       .replace(/_{10,}/g, U20);
+    // Podziel na punkty (zaczynające się od •) i zwykły tekst
     const linie=t.split('\n').filter(l=>l.trim());
-    let html='<div class="par"><p class="par-nr">§ '+nr+'</p>';
+    let html='<div class="par"><p class="par-nr">§&nbsp;'+nr+'</p>';
+    // Zbierz wszystkie linie nie-punktowe w bufor, scalaj w jeden <p>
     let bufor='';
     linie.forEach(l=>{
-      if(l.startsWith('•')){
-        if(bufor){html+='<p class="par-txt">'+bufor+'</p>';bufor='';}
-        html+='<p class="par-pkt">'+l+'</p>';
+      const trimmed=l.trim();
+      if(trimmed.startsWith('•')){
+        if(bufor.trim()){html+='<p class="par-txt">'+bufor.trim()+'</p>';bufor='';}
+        html+='<p class="par-pkt">'+trimmed+'</p>';
       } else {
-        bufor+=l+' ';
+        // Dołącz do bufora bez łamania linii - tekst płynie ciągiem
+        bufor+=trimmed+' ';
       }
     });
-    if(bufor) html+='<p class="par-txt">'+bufor.trim()+'</p>';
+    if(bufor.trim()) html+='<p class="par-txt">'+bufor.trim()+'</p>';
     html+='</div>';
     return html;
   }
@@ -859,16 +863,16 @@ function buildHtmlUmowy(){
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"Times New Roman",Times,serif;font-size:10pt;line-height:1.5;color:#000;background:#fff}
 .strona{max-width:21cm;margin:0 auto;padding:1.8cm 2.2cm}
-.tytul{text-align:center;font-weight:bold;font-size:11pt;margin-bottom:0.8em;text-transform:uppercase;letter-spacing:0.03em}
-.zawarta{text-align:left;margin-bottom:0.8em;font-size:10pt}
-.strony{margin-bottom:0.8em;font-size:10pt;line-height:1.5}
+.tytul{text-align:center;font-weight:bold;font-size:11pt;margin-bottom:0.6em;text-transform:uppercase;letter-spacing:0.03em}
+.zawarta{text-align:left;margin-bottom:0.6em;font-size:10pt}
+.strony{margin-bottom:0.6em;font-size:10pt;line-height:1.5}
 .strony p{margin-bottom:0.2em}
-.lacze{text-align:left;margin:0.3em 0;font-size:10pt}
-.par{margin-bottom:0.8em}
-.par-nr{text-align:center;font-weight:bold;font-size:10pt;margin-bottom:0.25em}
-.par-txt{text-align:justify;font-size:10pt;line-height:1.5;margin-bottom:0.2em}
-.par-pkt{font-size:10pt;line-height:1.5;margin-bottom:0.2em;padding-left:1em;text-indent:-1em;text-align:justify}
-.podpisy{width:100%;margin-top:2em;border-collapse:collapse}
+.lacze{text-align:left;margin:0.2em 0;font-size:10pt}
+.par{margin-bottom:0.6em;page-break-inside:avoid;orphans:3;widows:3}
+.par-nr{text-align:center;font-weight:bold;font-size:10pt;margin-bottom:0.2em;page-break-after:avoid}
+.par-txt{text-align:justify;font-size:10pt;line-height:1.5;margin-bottom:0.15em;orphans:3;widows:3}
+.par-pkt{font-size:10pt;line-height:1.5;margin-bottom:0.15em;padding-left:1em;text-indent:-1em;text-align:justify;page-break-inside:avoid;orphans:3;widows:3}
+.podpisy{width:100%;margin-top:1.5em;border-collapse:collapse;page-break-inside:avoid}
 .podpisy td{width:50%;vertical-align:top;padding:0 1em}
 .podpisy td:first-child{padding-left:0}
 .podp-label{font-weight:bold;font-size:10pt;margin-bottom:2em;text-align:center}
@@ -877,7 +881,13 @@ body{font-family:"Times New Roman",Times,serif;font-size:10pt;line-height:1.5;co
 .druk-btn{text-align:center;margin-bottom:1cm;display:flex;gap:10px;justify-content:center}
 button{padding:10px 24px;font-size:13px;background:#185FA5;color:#fff;border:none;border-radius:6px;cursor:pointer}
 button.sec{background:#fff;color:#185FA5;border:1px solid #185FA5}
-@media print{.druk-btn{display:none!important}}
+@media print{
+  .druk-btn{display:none!important}
+  .par{page-break-inside:avoid}
+  .par-pkt{page-break-inside:avoid}
+  .podpisy{page-break-inside:avoid}
+  body{-webkit-print-color-adjust:exact}
+}
 </style>
 </head>
 <body>
