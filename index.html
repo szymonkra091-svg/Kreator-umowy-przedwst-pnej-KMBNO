@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Kreator Umowy Przedwstępnej — KMBNO</title>
+<title>Kreator Umowy Rezerwacyjnej — KMBNO</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -252,6 +252,17 @@ input[type=checkbox]{width:15px;height:15px;flex-shrink:0;margin-top:1px;accent-
       <div id="kml"></div>
       <button class="baddkm" onclick="addKM()">+ dodaj sprawę KM</button>
     </div>
+    <hr class="div"/>
+    <div class="ctit" style="margin-bottom:8px">Miejsce parkingowe / udział w hali garażowej (opcjonalnie)</div>
+    <div class="chk"><input type="checkbox" id="cpark" onchange="togPark()"/><label for="cpark">Dodaj udział w hali garażowej jako osobny punkt §1</label></div>
+    <div id="bpark" style="display:none">
+      <div class="row r2">
+        <div class="fg"><label>Udział</label><input type="text" id="parkud" placeholder="np. 47/10000" oninput="up2()"/></div>
+        <div class="fg"><label>Miejscowość</label><input type="text" id="parkms" placeholder="np. Wrocław" oninput="up2()"/></div>
+      </div>
+      <div class="row r1"><div class="fg"><label>Ulica i numery budynków hali garażowej</label><input type="text" id="parkul" placeholder="np. Hubska 60, 60A, 60B, 62, 62A, 62B" oninput="up2()"/></div></div>
+      <div class="row r1"><div class="fg"><label>Numer KW hali garażowej</label><input type="text" id="parkkw" placeholder="np. WR1K/00304517/8" oninput="up2()"/></div></div>
+    </div>
   </div>
   <div class="card">
     <div class="ctit">Podgląd §1</div>
@@ -321,24 +332,34 @@ input[type=checkbox]{width:15px;height:15px;flex-shrink:0;margin-top:1px;accent-
 <!-- KROK 4 -->
 <div class="sec" id="s4">
   <div class="stit">Postanowienia końcowe</div>
-  <div class="ssub">Krok 4 z 5 — §7, §8, §9, §10 — zapisy stałe</div>
+  <div class="ssub">Krok 4 z 5 — zapisy stałe (§7 i dalej)</div>
+  <div class="card">
+    <div class="ctit">Paragraf dodatkowy (opcjonalnie)</div>
+    <div class="chk"><input type="checkbox" id="cinw" onchange="updS4()"/><label for="cinw" style="font-size:13px;font-weight:500;color:var(--tx)">Inwentaryzacja nieruchomości — niepewny metraż</label></div>
+    <div class="ibox" id="inwinfo" style="display:none;color:var(--gnd);background:var(--gnbg)">Dodaje §8 o inwentaryzacji i obmiarze — kolejne paragrafy przesuwają się o jeden (§8→§9, §9→§10, §10→§11).</div>
+  </div>
   <div class="card">
     <div class="pbadge">§7 — Zakaz sprzedaży osobom trzecim</div>
     <div class="spar">Sprzedający, od dnia zawarcia niniejszej umowy do dnia zawarcia umowy przyrzeczonej, zobowiązuje się powstrzymać od wszelkich czynności mających na celu sprzedaż Nieruchomości osobom trzecim, w szczególności od zamieszczania ofert jej sprzedaży za pośrednictwem sieci Internet lub kontaktu z podmiotami z zakresu obrotu nieruchomościami. W przypadku, gdyby Sprzedający naruszył opisane zobowiązanie, Kupujący jest uprawniony do dochodzenia odszkodowania na zasadach ogólnych.</div>
     <div class="snote">Zapis stały — bez edycji</div>
   </div>
+  <div class="card" id="cardInw" style="display:none">
+    <div class="pbadge">§8 — Inwentaryzacja nieruchomości (niepewny metraż)</div>
+    <div class="spar">• Sprzedający oświadcza, że powierzchnia użytkowa Lokalu wynosi ______ m² oraz że wskazana powierzchnia stanowiła podstawę ustalenia ceny sprzedaży określonej w niniejszej umowie.<br><br>• Kupujący jest uprawniony, w każdym czasie do dnia zawarcia umowy przyrzeczonej, do zlecenia wykonania inwentaryzacji oraz obmiaru Lokalu przez osobę posiadającą odpowiednie uprawnienia. Wynik takiej inwentaryzacji jest wiążący dla Stron.<br><br>• Jeżeli wynik inwentaryzacji wykaże, że rzeczywista powierzchnia użytkowa Lokalu jest mniejsza od powierzchni wskazanej powyżej o więcej niż 1%, cena sprzedaży ulega odpowiedniemu obniżeniu o kwotę stanowiącą iloczyn różnicy pomiędzy powierzchnią rzeczywistą a powierzchnią wskazaną powyżej oraz ceny za 1 m², obliczonej jako iloraz ceny sprzedaży określonej w niniejszej umowie i powierzchni wskazanej powyżej.<br><br>• Jeżeli różnica, o której mowa powyżej, przekroczy 3% wskazanej powierzchni, Kupujący jest uprawniony, według własnego wyboru, do żądania odpowiedniego obniżenia ceny albo do odstąpienia od niniejszej umowy w terminie 14 dni od dnia otrzymania wyniku inwentaryzacji.<br><br>• W przypadku skutecznego odstąpienia od umowy na podstawie powyższego zapisu Sprzedający zwróci Kupującemu otrzymany zadatek w wysokości nominalnej w terminie 7 dni od dnia doręczenia oświadczenia o odstąpieniu, a Strony nie będą dochodziły wobec siebie żadnych dalszych roszczeń wynikających z niewykonania niniejszej umowy.</div>
+    <div class="snote">Metraż w ust. 1 pobierany automatycznie z §1</div>
+  </div>
   <div class="card">
-    <div class="pbadge">§8 — Stan nieruchomości w dniu aktu</div>
+    <div class="pbadge">§<span id="nStan">8</span> — Stan nieruchomości w dniu aktu</div>
     <div class="spar">Sprzedający zobowiązuje się, że w dniu podpisania umowy przyrzeczonej stan Nieruchomości będzie:<br><br>• Zgodny z dokumentacją zdjęciową wykonaną w dniu podpisania niniejszej umowy <em>(niepotrzebne skreślić)</em>.<br><br>• Całkowicie opróżniony ze wszystkich mebli, rzeczy ruchomych i wyposażenia, z wyjątkiem elementów trwale związanych z nieruchomością <em>(niepotrzebne skreślić)</em>.</div>
     <div class="snote">Skreślenia nanoszone ręcznie przy podpisaniu</div>
   </div>
   <div class="card">
-    <div class="pbadge">§9 — Postanowienia ogólne</div>
+    <div class="pbadge">§<span id="nOgolne">9</span> — Postanowienia ogólne</div>
     <div class="spar">• Wszelkie zmiany dotyczące niniejszej Umowy muszą być dokonane na piśmie, w formie aneksu pod rygorem nieważności.<br><br>• W sprawach nieuregulowanych niniejszą Umową zastosowanie mają przepisy Kodeksu Cywilnego.</div>
     <div class="snote">Zapis stały — bez edycji</div>
   </div>
   <div class="card">
-    <div class="pbadge">§10 — Egzemplarze</div>
+    <div class="pbadge">§<span id="nEgz">10</span> — Egzemplarze</div>
     <div class="spar">Umowa została sporządzona w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze Stron.</div>
     <div class="snote">Zapis stały — bez edycji</div>
   </div>
@@ -630,6 +651,7 @@ function togEgz(){
   if(on&&document.getElementById('kml').children.length===0)addKM();
   up2();
 }
+function togPark(){document.getElementById('bpark').style.display=document.getElementById('cpark').checked?'block':'none';up2();}
 function addKM(){KMC++;const n=KMC;const d=document.createElement('div');d.className='kmrow';d.id='km'+n;d.innerHTML='<input type="text" id="kmi'+n+'" placeholder="np. KM 45/20" oninput="up2()"/><button class="brmk" onclick="rmKM('+n+')">×</button>';document.getElementById('kml').appendChild(d);up2();}
 function rmKM(n){const e=document.getElementById('km'+n);if(e)e.remove();up2();}
 function getKMs(){return Array.from(document.getElementById('kml').querySelectorAll('input')).map(i=>i.value.trim()).filter(Boolean);}
@@ -710,11 +732,11 @@ function getSA(n){
 function buildS(n,idx,total){
   const im=(document.getElementById('sprim'+n)?.value||'').trim();
   const na=(document.getElementById('sprna'+n)?.value||'').trim();
-  const iN=(im&&na)?im+' '+na:(im||na||'______________________');
+  const iN=(im&&na)?im+' '+na:(im||na||'_________________________________');
   const pl=document.getElementById('sp'+n)?.value||'k';
   const shr=document.getElementById('sr'+n)?.checked;
-  const oj=g('soj'+n)||'_______',ma=g('sma'+n)||'_______';
-  const adr=getSA(n)||'ul. ____________________________________________';
+  const oj=g('soj'+n)||'__________________',ma=g('sma'+n)||'__________________';
+  const adr=getSA(n)||'ul. __________________________________________________________________';
   const leg=pl==='k'?'legitymującą się':'legitymującym się';
   const cs=pl==='k'?'córką':'synem';
   const rd=shr?', '+cs+' '+oj+' i '+ma:'';
@@ -738,7 +760,7 @@ function up1(){
   const dzialajacy=p?(p.plec==='k'?'działająca':'działającego'):'działającego';
   const hkw=document.getElementById('hkw').checked;
   const tl=TYP==='o'?'Lokal — odrębna własność':TYP==='s'?'Spółdzielcze własnościowe'+(hkw?' (z KW)':' (bez KW)'):'Nieruchomość gruntowa';
-  const t='<div style="text-align:center;font-weight:600;margin-bottom:6px">UMOWA PRZEDWSTĘPNA KUPNA – SPRZEDAŻY NIERUCHOMOŚCI</div>'
+  const t='<div style="text-align:center;font-weight:600;margin-bottom:6px">UMOWA REZERWACYJNA KUPNA – SPRZEDAŻY NIERUCHOMOŚCI</div>'
     +'zawarta w '+mZ+' dnia '+dZ+' pomiędzy:<br><br>'
     +sp.replace(/\n\n/g,'<br>').replace(/\n/g,' ')
     +'<br>a<br>'
@@ -758,21 +780,27 @@ function bP1(){
   let core='';
   if(TYP==='o'){
     const nr=ph(g('onr'),'____'),ms=ph(g('oms'),'______________________________'),ul=ph(g('oul'),'______________________________'),pw=ph(g('opw'),'_____'),kw=ph(g('okw'),'______________________________');
-    core='• Jest właścicielem lokalu stanowiącego odrębną nieruchomość o numerze '+nr+' położonego w '+ms+' przy ulicy '+ul+', o powierzchni użytkowej '+pw+' m², dla którego prowadzona jest księga wieczysta numer '+kw+', zwanego dalej Nieruchomością.\n\n• Nieruchomość nie jest przedmiotem praw lub roszczeń osób trzecich, ograniczeń w rozporządzaniu oraz umów, z których wynikałoby zobowiązanie do jej zbycia na rzecz jakichkolwiek osób i nie jest obciążona ograniczonymi prawami rzeczowymi.';
+    core='• Jest właścicielem lokalu stanowiącego odrębną nieruchomość o numerze '+nr+' położonego w '+ms+' przy ulicy '+ul+', o powierzchni użytkowej '+pw+' m², dla którego prowadzona jest księga wieczysta numer '+kw+', zwanego dalej Nieruchomością.';
   }else if(TYP==='s'){
     const nr=ph(g('snr'),'____'),ms=ph(g('sms'),'______________________________'),ul=ph(g('sul'),'______________________________'),pw=ph(g('spw'),'_____');
     const hk=document.getElementById('shkw').checked,kw=ph(g('skw'),'______________________________');
     const kwF=hk?', dla którego prowadzona jest księga wieczysta numer '+kw:'';
-    core='• Przysługuje mu spółdzielcze własnościowe prawo do lokalu mieszkalnego o numerze '+nr+' położonego w '+ms+' przy ulicy '+ul+', o powierzchni użytkowej '+pw+' m²'+kwF+', zwane dalej Nieruchomością.\n\n• Nieruchomość nie jest przedmiotem praw lub roszczeń osób trzecich, ograniczeń w rozporządzaniu oraz umów, z których wynikałoby zobowiązanie do jej zbycia na rzecz jakichkolwiek osób i nie jest obciążona ograniczonymi prawami rzeczowymi.';
+    core='• Przysługuje mu spółdzielcze własnościowe prawo do lokalu mieszkalnego o numerze '+nr+' położonego w '+ms+' przy ulicy '+ul+', o powierzchni użytkowej '+pw+' m²'+kwF+', zwane dalej Nieruchomością.';
   }else{
     const dz=ph(g('gdz'),'_____________'),ms=ph(g('gms'),'______________________________'),ul=ph(g('gul'),'______________________________'),pw=ph(g('gpw'),'_____'),kw=ph(g('gkw'),'______________________________');
     const zF=document.getElementById('gzab').checked?', zabudowanej oddanym do użytkowania budynkiem':'';
-    core='• Jest właścicielem nieruchomości gruntowej stanowiącej działkę ewidencyjną o numerze '+dz+' położonej w '+ms+' przy ulicy '+ul+', o powierzchni '+pw+' HA, dla której prowadzona jest księga wieczysta numer '+kw+zF+', zwanej dalej Nieruchomością.\n\n• Nieruchomość nie jest przedmiotem praw lub roszczeń osób trzecich, ograniczeń w rozporządzaniu oraz umów, z których wynikałoby zobowiązanie do jej zbycia na rzecz jakichkolwiek osób i nie jest obciążona ograniczonymi prawami rzeczowymi.';
+    core='• Jest właścicielem nieruchomości gruntowej stanowiącej działkę ewidencyjną o numerze '+dz+' położonej w '+ms+' przy ulicy '+ul+', o powierzchni '+pw+' HA, dla której prowadzona jest księga wieczysta numer '+kw+zF+', zwanej dalej Nieruchomością.';
+  }
+  const CLA='• Nieruchomość nie jest przedmiotem praw lub roszczeń osób trzecich, ograniczeń w rozporządzaniu oraz umów, z których wynikałoby zobowiązanie do jej zbycia na rzecz jakichkolwiek osób i nie jest obciążona ograniczonymi prawami rzeczowymi.';
+  let park='';
+  if(document.getElementById('cpark')?.checked){
+    const pud=ph(g('parkud'),'_______'),pms=ph(g('parkms'),'______________________________'),pul=ph(g('parkul'),'______________________________'),pkw=ph(g('parkkw'),'______________________________');
+    park='\n\n• Jest właścicielem udziału wynoszącego '+pud+' części w stanowiącym odrębną nieruchomość lokalu niemieszkalnym - hali garażowej, znajdującym się w '+pms+' przy ulicy '+pul+', dla którego prowadzona jest księga wieczysta numer '+pkw+', zwanym dalej Nieruchomością.';
   }
   let ob='';
   if(document.getElementById('chip').checked){const w=g('hipw')||'nazwa wierzyciela';ob+='\n\n• W dziale IV Księgi Wieczystej Nieruchomości widnieje hipoteka umowna '+w+'. Sprzedający oświadcza, że hipoteka zostanie w całości spłacona przy umowie przyrzeczonej z części ceny sprzedaży po przedłożeniu promesy, bądź do umowy przyrzeczonej okaże stosowne zaświadczenie do wykreślenia hipoteki z Księgi Wieczystej.';}
   if(document.getElementById('cegz').checked){const kms=getKMs();const ks=kms.length>0?kms.map(s=>'w sprawie '+s).join(', '):'w sprawie KM ____';ob+='\n\n• W dziale III Księgi Wieczystej Nieruchomości widnieje wpis wszczęcia egzekucji '+ks+'. Sprzedający oświadcza, że zadłużenie to zostanie w całości spłacone przy umowie przyrzeczonej z części ceny sprzedaży po przedłożeniu promesy wierzyciela, bądź do umowy przyrzeczonej okaże stosowne zaświadczenie do wykreślenia wszczęcia egzekucji.';}
-  return '§ 1\n\nSprzedający oświadcza, że:\n\n'+core+ob;
+  return '§ 1\n\nSprzedający oświadcza, że:\n\n'+core+park+'\n\n'+CLA+ob;
 }
 function fmtPrev(tekst){
   const linie=tekst.split('\n');
@@ -815,7 +843,7 @@ function bP3(){
   document.getElementById('zsl').textContent=zsl?zsl+' złotych':'—';
   const cS=cv?cv.toLocaleString('pl-PL')+' PLN':'____________________';
   const cSl=csl?csl+' zł':'____________________________________________________________';
-  const zS=zv?zv.toLocaleString('pl-PL')+' PLN':'________________________________________';
+  const zS=zv?zv.toLocaleString('pl-PL')+' PLN':'________________________________________________________________________________';
   const zSl=zsl?zsl+' zł':'____________________________________________________________';
   const kt=g('konto')||'__________________________________________________________________________________________';
   const ta=g('takt');const taS=ta?fD(ta):'____________________';
@@ -835,10 +863,22 @@ function up3(){
 
 // ===== PEŁNA UMOWA =====
 const P2='§ 2\n\nPrzedmiotem niniejszej Umowy jest sprzedaż na rzecz Kupującego Nieruchomości, szczegółowo opisanej w § 1 niniejszej Umowy.';
-const P7='§ 7\n\nSprzedający, od dnia zawarcia niniejszej umowy do dnia zawarcia umowy przyrzeczonej, zobowiązuje się powstrzymać od wszelkich czynności mających na celu sprzedaż Nieruchomości osobom trzecim, w szczególności od zamieszczania ofert jej sprzedaży za pośrednictwem sieci Internet lub kontaktu z podmiotami z zakresu obrotu nieruchomościami. W przypadku, gdyby Sprzedający naruszył opisane zobowiązanie, Kupujący jest uprawniony do dochodzenia odszkodowania na zasadach ogólnych.';
-const P8='§ 8\n\nSprzedający zobowiązuje się, że w dniu podpisania umowy przyrzeczonej stan Nieruchomości będzie:\n\n• Zgodny z dokumentacją zdjęciową wykonaną w dniu podpisania niniejszej umowy (niepotrzebne skreślić).\n\n• Całkowicie opróżniony ze wszystkich mebli, rzeczy ruchomych i wyposażenia, z wyjątkiem elementów trwale związanych z nieruchomością (niepotrzebne skreślić).';
-const P9='§ 9\n\n• Wszelkie zmiany dotyczące niniejszej Umowy muszą być dokonane na piśmie, w formie aneksu pod rygorem nieważności.\n\n• W sprawach nieuregulowanych niniejszą Umową zastosowanie mają przepisy Kodeksu Cywilnego.';
-const P10='§ 10\n\nUmowa została sporządzona w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze Stron.';
+const B_ZAKAZ='Sprzedający, od dnia zawarcia niniejszej umowy do dnia zawarcia umowy przyrzeczonej, zobowiązuje się powstrzymać od wszelkich czynności mających na celu sprzedaż Nieruchomości osobom trzecim, w szczególności od zamieszczania ofert jej sprzedaży za pośrednictwem sieci Internet lub kontaktu z podmiotami z zakresu obrotu nieruchomościami. W przypadku, gdyby Sprzedający naruszył opisane zobowiązanie, Kupujący jest uprawniony do dochodzenia odszkodowania na zasadach ogólnych.';
+const B_STAN='Sprzedający zobowiązuje się, że w dniu podpisania umowy przyrzeczonej stan Nieruchomości będzie:\n\n• Zgodny z dokumentacją zdjęciową wykonaną w dniu podpisania niniejszej umowy (niepotrzebne skreślić).\n\n• Całkowicie opróżniony ze wszystkich mebli, rzeczy ruchomych i wyposażenia, z wyjątkiem elementów trwale związanych z nieruchomością (niepotrzebne skreślić).';
+const B_OGOLNE='• Wszelkie zmiany dotyczące niniejszej Umowy muszą być dokonane na piśmie, w formie aneksu pod rygorem nieważności.\n\n• W sprawach nieuregulowanych niniejszą Umową zastosowanie mają przepisy Kodeksu Cywilnego.';
+const B_EGZ='Umowa została sporządzona w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze Stron.';
+function powNieruch(){return (TYP==='o'?g('opw'):TYP==='s'?g('spw'):TYP==='g'?g('gpw'):'')||'________';}
+function bInw(){const pw=powNieruch();return '• Sprzedający oświadcza, że powierzchnia użytkowa Lokalu wynosi '+pw+' m² oraz że wskazana powierzchnia stanowiła podstawę ustalenia ceny sprzedaży określonej w niniejszej umowie.\n\n• Kupujący jest uprawniony, w każdym czasie do dnia zawarcia umowy przyrzeczonej, do zlecenia wykonania inwentaryzacji oraz obmiaru Lokalu przez osobę posiadającą odpowiednie uprawnienia. Wynik takiej inwentaryzacji jest wiążący dla Stron.\n\n• Jeżeli wynik inwentaryzacji wykaże, że rzeczywista powierzchnia użytkowa Lokalu jest mniejsza od powierzchni wskazanej powyżej o więcej niż 1%, cena sprzedaży ulega odpowiedniemu obniżeniu o kwotę stanowiącą iloczyn różnicy pomiędzy powierzchnią rzeczywistą a powierzchnią wskazaną powyżej oraz ceny za 1 m², obliczonej jako iloraz ceny sprzedaży określonej w niniejszej umowie i powierzchni wskazanej powyżej.\n\n• Jeżeli różnica, o której mowa powyżej, przekroczy 3% wskazanej powierzchni, Kupujący jest uprawniony, według własnego wyboru, do żądania odpowiedniego obniżenia ceny albo do odstąpienia od niniejszej umowy w terminie 14 dni od dnia otrzymania wyniku inwentaryzacji.\n\n• W przypadku skutecznego odstąpienia od umowy na podstawie powyższego zapisu Sprzedający zwróci Kupującemu otrzymany zadatek w wysokości nominalnej w terminie 7 dni od dnia doręczenia oświadczenia o odstąpieniu, a Strony nie będą dochodziły wobec siebie żadnych dalszych roszczeń wynikających z niewykonania niniejszej umowy.';}
+function tailBodies(){const inw=document.getElementById('cinw')?.checked;const arr=[B_ZAKAZ];if(inw)arr.push(bInw());arr.push(B_STAN,B_OGOLNE,B_EGZ);return arr;}
+function bTail(){let n=7;return tailBodies().map(b=>'§ '+(n++)+'\n\n'+b);}
+function updS4(){
+  const inw=document.getElementById('cinw').checked;
+  document.getElementById('cardInw').style.display=inw?'block':'none';
+  document.getElementById('inwinfo').style.display=inw?'block':'none';
+  document.getElementById('nStan').textContent=inw?9:8;
+  document.getElementById('nOgolne').textContent=inw?10:9;
+  document.getElementById('nEgz').textContent=inw?11:10;
+}
 
 function bHead(){
   const mZ=g('mz')||'___________',dZ=fD(g('dz'))||'___________';
@@ -849,7 +889,7 @@ function bHead(){
   const p=getPD();
   const pm=p?p.name+', zam. '+p.adres+', PESEL: '+p.pesel:'(wybierz lub wpisz pełnomocnika)';
   const dzialajacy=p?(p.plec==='k'?'działająca':'działającego'):'działającego';
-  return 'UMOWA PRZEDWSTĘPNA KUPNA – SPRZEDAŻY NIERUCHOMOŚCI\n\nzawarta w '+mZ+' dnia '+dZ+' pomiędzy:\n\n'+sp+'\n\na\n\n'+(ids.length+1)+'. firmą KMBNO Sp. z o. o. z siedzibą przy ul. Twarda 18, 00-105 Warszawa, NIP: 5252862330, REGON: 388950413, KRS: 0000899554, reprezentowaną przy niniejszej umowie przez pełnomocnika '+pm+', '+dzialajacy+' jako Pełnomocnik spółki KMBNO Sp. z o. o.,\n\nzwaną dalej Kupującym,\nzwanymi dalej łącznie Stronami.';
+  return 'UMOWA REZERWACYJNA KUPNA – SPRZEDAŻY NIERUCHOMOŚCI\n\nzawarta w '+mZ+' dnia '+dZ+' pomiędzy:\n\n'+sp+'\n\na\n\n'+(ids.length+1)+'. firmą KMBNO Sp. z o. o. z siedzibą przy ul. Twarda 18, 00-105 Warszawa, NIP: 5252862330, REGON: 388950413, KRS: 0000899554, reprezentowaną przy niniejszej umowie przez pełnomocnika '+pm+', '+dzialajacy+' jako Pełnomocnik spółki KMBNO Sp. z o. o.,\n\nzwaną dalej Kupującym,\nzwanymi dalej łącznie Stronami.';
 }
 
 function bPodp(){
@@ -864,7 +904,7 @@ function bPodp(){
 }
 
 function buildFull(){
-  const parts=[bHead(),bP1(),P2,bP3(),P7,P8,P9,P10,bPodp()];
+  const parts=[bHead(),bP1(),P2,bP3(),...bTail(),bPodp()];
   document.getElementById('pvf').textContent=parts.join('\n\n');
 }
 
@@ -903,7 +943,7 @@ function buildHtmlUmowy(){
     let bufor='';
     linie.forEach(l=>{
       const trimmed=l.trim();
-      if(trimmed.startsWith('•')){
+      if(trimmed.startsWith('•')||/^\d+\.\s/.test(trimmed)){
         if(bufor.trim()){html+='<p class="par-txt">'+bufor.trim()+'</p>';bufor='';}
         html+='<p class="par-pkt">'+trimmed+'</p>';
       } else {
@@ -924,6 +964,10 @@ function buildHtmlUmowy(){
   const p4=par36.match(/§ 4\n\n([\s\S]*?)(?=\n\n§ 5)/)?.[1]||'';
   const p5=par36.match(/§ 5\n\n([\s\S]*?)(?=\n\n§ 6)/)?.[1]||'';
   const p6=par36.match(/§ 6\n\n([\s\S]*?)$/)?.[1]||'';
+
+  // §7 i dalej — dynamiczna numeracja (opcjonalny §8 inwentaryzacja)
+  let tn=7;
+  const tailHtml=tailBodies().map(b=>par(String(tn++), b.replace(/\(niepotrzebne skreślić\)/g,'<b>(niepotrzebne skreślić)</b>'))).join('\n');
 
   // Podpisy
   const bls2=document.querySelectorAll('.sblock');
@@ -946,7 +990,7 @@ function buildHtmlUmowy(){
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Umowa Przedwstępna — KMBNO</title>
+<title>Umowa Rezerwacyjna — KMBNO</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"Times New Roman",Times,serif;font-size:10pt;line-height:1.5;color:#000;background:#fff}
@@ -984,7 +1028,7 @@ button.sec{background:#fff;color:#185FA5;border:1px solid #185FA5}
   <button onclick="window.print()">Zapisz jako PDF / Drukuj</button>
   <button class="sec" onclick="window.close()">Zamknij</button>
 </div>
-<p class="tytul">UMOWA PRZEDWSTĘPNA KUPNA – SPRZEDAŻY NIERUCHOMOŚCI</p>
+<p class="tytul">UMOWA REZERWACYJNA KUPNA – SPRZEDAŻY NIERUCHOMOŚCI</p>
 <p class="zawarta">zawarta w ${mZ} dnia ${dZ} pomiędzy:</p>
 <div class="strony">
 ${spHtml}
@@ -999,10 +1043,7 @@ ${par('3',p3)}
 ${par('4',p4)}
 ${par('5',p5)}
 ${par('6',p6)}
-${par('7','Sprzedający, od dnia zawarcia niniejszej umowy do dnia zawarcia umowy przyrzeczonej, zobowiązuje się powstrzymać od wszelkich czynności mających na celu sprzedaż Nieruchomości osobom trzecim, w szczególności od zamieszczania ofert jej sprzedaży za pośrednictwem sieci Internet lub kontaktu z podmiotami z zakresu obrotu nieruchomościami. W przypadku, gdyby Sprzedający naruszył opisane zobowiązanie, Kupujący jest uprawniony do dochodzenia odszkodowania na zasadach ogólnych.')}
-${par('8','Sprzedający zobowiązuje się, że w dniu podpisania umowy przyrzeczonej stan Nieruchomości będzie:\n\n• Zgodny z dokumentacją zdjęciową wykonaną w dniu podpisania niniejszej umowy <b>(niepotrzebne skreślić)</b>.\n\n• Całkowicie opróżniony ze wszystkich mebli, rzeczy ruchomych i wyposażenia, z wyjątkiem elementów trwale związanych z nieruchomością <b>(niepotrzebne skreślić)</b>.')}
-${par('9','• Wszelkie zmiany dotyczące niniejszej Umowy muszą być dokonane na piśmie, w formie aneksu pod rygorem nieważności.\n\n• W sprawach nieuregulowanych niniejszą Umową zastosowanie mają przepisy Kodeksu Cywilnego.')}
-${par('10','Umowa została sporządzona w dwóch jednobrzmiących egzemplarzach, po jednym dla każdej ze Stron.')}
+${tailHtml}
 
 ${podpisyHtml}
 </div>
@@ -1046,7 +1087,7 @@ function drukuj(){
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;
-  a.download='umowa_przedwstepna_KMBNO.html';
+  a.download='umowa_rezerwacyjna_KMBNO.html';
   document.body.appendChild(a);
   a.click();
   setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},1500);
